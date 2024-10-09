@@ -38,25 +38,41 @@ namespace NailsServer.DTO
 
         public bool IsManager { get; set; }
 
+        public User() { }
+        public User(Models.User modelUser)
+        {
+            this.UserId = modelUser.UserId;
+            this.FirstName = modelUser.FirstName;
+            this.LastName = modelUser.LastName;
+            this.DateOfBirth = modelUser.DateOfBirth;
+            this.Email = modelUser.Email;
+            this.PhoneNumber = modelUser.PhoneNumber;
+            this.UserAddress = modelUser.UserAddress;
+            this.Gender= modelUser.Gender;
+            this.Pass = modelUser.Pass;
+            this.IsManicurist = modelUser.IsManicurist;
+            this.IsBlocked = modelUser.IsBlocked;
+            this.ProfilePic = modelUser.ProfilePic;
+            this.IsManager = modelUser.IsManager;
+        }
 
-     
-        public virtual ICollection<ChatMessage> ChatMessageReceivers { get; set; } = new List<ChatMessage>();
+        public Models.User GetModel()
+        {
+            Models.User model = new Models.User();
+            model.FirstName = this.FirstName;
+            model.LastName = this.LastName;
+            model.DateOfBirth = this.DateOfBirth;
+            model.Email = this.Email;
+            model.PhoneNumber = this.PhoneNumber;
+            model.UserAddress = this.UserAddress;
+            model.Gender = this.Gender;
+            model.Pass = this.Pass;
+            model.IsManicurist = this.IsManicurist;
+            model.IsBlocked = this.IsBlocked;
+            model.ProfilePic = this.ProfilePic;
+            model.IsManager = this.IsManager;
+            return model;
+        }
 
-       
-        public virtual ICollection<ChatMessage> ChatMessageSenders { get; set; } = new List<ChatMessage>();
-
-       
-        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
-        public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
-
-     
-        public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
-
-     
-        public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
-
-
-        public virtual ICollection<Treatment> Treatments { get; set; } = new List<Treatment>();
     }
 }

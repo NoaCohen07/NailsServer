@@ -26,9 +26,31 @@ public class ChatMessage
   
     public string? Video { get; set; }
 
+    //public virtual User? Receiver { get; set; }
 
-    public virtual User? Receiver { get; set; }
 
-
-    public virtual User? Sender { get; set; }
+    //public virtual User? Sender { get; set; }
+    public ChatMessage() { }
+    public ChatMessage(Models.ChatMessage message)
+    {
+        this.SenderId = message.SenderId;
+        this.ReceiverId = message.ReceiverId;
+        this.MessageId = message.MessageId;
+        this.MessageText = message.MessageText;
+        this.MessageTime = message.MessageTime;
+        this.Pic = message.Pic;
+        this.Video = message.Video;
+    }
+    public Models.ChatMessage GetModel()
+    {
+        Models.ChatMessage message=new Models.ChatMessage();
+        message.SenderId = this.SenderId;
+        message.ReceiverId = this.ReceiverId;
+        message.MessageId = this.MessageId;
+        message.MessageText = this.MessageText;
+        message.MessageTime = this.MessageTime;
+        message.Pic = this.Pic;
+        message.Video = this.Video;
+        return message;
+    }
 }
