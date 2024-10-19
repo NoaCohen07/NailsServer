@@ -27,6 +27,7 @@ IsManicurist bit NOT NULL,
 IsBlocked bit NOT NULL,
 ProfilePic nvarchar (5),
 IsManager bit default 0 NOT NULL,
+IsPrivate bit default 0 NOT NULL
 )
 
 
@@ -94,7 +95,7 @@ GO
 ALTER ROLE db_owner ADD MEMBER [NailsUser]
 GO
 
-Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager) VALUES ('Noa','Cohen','20-mar-2007','noa20032007@gmail.com','0504445751','47 Sunset Lane','F','12345','0','0','1')
+Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, IsPrivate) VALUES ('Noa','Cohen','20-mar-2007','noa20032007@gmail.com','0504445751','47 Sunset Lane','F','12345','0','0','1','0')
 Go
 Select * From Users
 Go
