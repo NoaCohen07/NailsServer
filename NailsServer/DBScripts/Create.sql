@@ -26,7 +26,7 @@ Pass nvarchar(20) NOT NULL,
 IsManicurist bit NOT NULL,
 IsBlocked bit NOT NULL,
 ProfilePic nvarchar (5),
-IsManager bit default 0 NOT 
+IsManager bit default 0 NOT Null
 )
 
 
@@ -85,8 +85,8 @@ Price int NOT NULL
 )
 GO
 
---CREATE LOGIN [NailsLogin] WITH PASSWORD='12345'
---GO
+CREATE LOGIN [NailsLogin] WITH PASSWORD='12345'
+GO
 
 CREATE USER [NailsUser] FOR LOGIN[NailsLogin]
 GO
