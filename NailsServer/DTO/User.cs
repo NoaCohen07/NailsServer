@@ -24,7 +24,7 @@ namespace NailsServer.DTO
     
         public string UserAddress { get; set; } = null!;
 
-        public string Gender { get; set; } = null!;
+        public char Gender { get; set; }
 
 
         public string Pass { get; set; } = null!;
@@ -48,7 +48,7 @@ namespace NailsServer.DTO
             this.Email = modelUser.Email;
             this.PhoneNumber = modelUser.PhoneNumber;
             this.UserAddress = modelUser.UserAddress;
-            this.Gender= modelUser.Gender;
+            this.Gender= modelUser.Gender[0];
             this.Pass = modelUser.Pass;
             this.IsManicurist = modelUser.IsManicurist;
             this.IsBlocked = modelUser.IsBlocked;
@@ -65,7 +65,7 @@ namespace NailsServer.DTO
             model.Email = this.Email;
             model.PhoneNumber = this.PhoneNumber;
             model.UserAddress = this.UserAddress;
-            model.Gender = this.Gender;
+            model.Gender = this.Gender.ToString();
             model.Pass = this.Pass;
             model.IsManicurist = this.IsManicurist;
             model.IsBlocked = this.IsBlocked;
