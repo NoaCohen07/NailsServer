@@ -52,7 +52,8 @@ namespace NailsServer.Controllers
 
                 DTO.User dtoUser = new DTO.User(modelsUser);
                 //profile img
-                //dtoUser.ProfileImagePath = GetProfileImageVirtualPath(dtoUser.Id);
+                //dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser.UserId);
+                dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser.UserId);
                 return Ok(dtoUser);
             }
             catch (Exception ex)
@@ -92,6 +93,7 @@ namespace NailsServer.Controllers
         public async Task<IActionResult> UploadProfileImageAsync(IFormFile file)
         {
             //Check if who is logged in
+            //string extention1 = "";
             string? userEmail = HttpContext.Session.GetString("loggedInUser");
             if (string.IsNullOrEmpty(userEmail))
             {
@@ -117,9 +119,11 @@ namespace NailsServer.Controllers
                 //Check the file extention!
                 string[] allowedExtentions = { ".png", ".jpg" };
                 string extention = "";
+                
                 if (file.FileName.LastIndexOf(".") > 0)
                 {
                     extention = file.FileName.Substring(file.FileName.LastIndexOf(".")).ToLower();
+                    user.ProfilePic = extention;
                 }
                 if (!allowedExtentions.Where(e => e == extention).Any())
                 {
@@ -147,9 +151,12 @@ namespace NailsServer.Controllers
                 }
 
             }
-
+            //Update image extention in DB
+            context.Entry(user).State = EntityState.Modified;
+            context.SaveChanges();
             DTO.User dtoUser = new DTO.User(user);
-            dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser.UserId);
+             dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser.UserId);
+           
             return Ok(dtoUser);
         }
 
