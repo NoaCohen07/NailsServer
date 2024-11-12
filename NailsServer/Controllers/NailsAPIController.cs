@@ -53,7 +53,7 @@ namespace NailsServer.Controllers
                 DTO.User dtoUser = new DTO.User(modelsUser);
                 //profile img
                 //dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser.UserId);
-                dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser.UserId);
+                dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser);
                 return Ok(dtoUser);
             }
             catch (Exception ex)
@@ -79,7 +79,7 @@ namespace NailsServer.Controllers
                 //User was added!
                 DTO.User dtoUser = new DTO.User(modelsUser);
                 //profile pic
-                dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser.UserId);
+                dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser);
                 return Ok(dtoUser);
             }
             catch (Exception ex)
@@ -155,7 +155,7 @@ namespace NailsServer.Controllers
             context.Entry(user).State = EntityState.Modified;
             context.SaveChanges();
             DTO.User dtoUser = new DTO.User(user);
-             dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser.UserId);
+            dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser);
            
             return Ok(dtoUser);
         }
@@ -193,26 +193,35 @@ namespace NailsServer.Controllers
 
         //this function check which profile image exist and return the virtual path of it.
         //if it does not exist it returns the default profile image virtual path
-        private string GetProfileImageVirtualPath(int userId)
+        private string GetProfileImageVirtualPath(DTO.User dtoUser)
         {
-            string virtualPath = $"/profileImages/{userId}";
-            string path = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{userId}.png";
-            if (System.IO.File.Exists(path))
+            //string virtualPath = $"/profileImages/{dtoUser.UserId}";
+            //string path = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{dtoUser.UserId}.png";
+            //if (System.IO.File.Exists(path))
+            //{
+            //    virtualPath += ".png";
+            //}
+            //else
+            //{
+            //    path = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{dtoUser.UserId}.jpg";
+            //    if (System.IO.File.Exists(path))
+            //    {
+            //        virtualPath += ".jpg";
+            //    }
+            //    else
+            //    {
+            //        virtualPath = $"/profileImages/default.png";
+            //    }
+            //}
+
+            //return virtualPath;
+
+            string virtualPath = $"/profileImages/{dtoUser.UserId}";
+            if (dtoUser.ProfilePic==null)
             {
-                virtualPath += ".png";
+                virtualPath = $"/profileImages/default.png";
             }
-            else
-            {
-                path = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{userId}.jpg";
-                if (System.IO.File.Exists(path))
-                {
-                    virtualPath += ".jpg";
-                }
-                else
-                {
-                    virtualPath = $"/profileImages/default.png";
-                }
-            }
+           
 
             return virtualPath;
         }
