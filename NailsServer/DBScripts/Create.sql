@@ -96,6 +96,9 @@ GO
 
 Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager) VALUES ('Noa','Cohen','20-mar-2007','noa20032007@gmail.com','0504445751','47 Sunset Lane','F','12345','0','0','1')
 Go
+UPDATE Users
+SET Pass = 'N12345'
+WHERE Email = 'noa20032007@gmail.com';
 Select * From Users
 Go
 --scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=NailsDB;User ID=NailsLogin;Password=12345;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context NailsDbContext -DataAnnotations –force

@@ -195,26 +195,7 @@ namespace NailsServer.Controllers
         //if it does not exist it returns the default profile image virtual path
         private string GetProfileImageVirtualPath(DTO.User dtoUser)
         {
-            //string virtualPath = $"/profileImages/{dtoUser.UserId}";
-            //string path = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{dtoUser.UserId}.png";
-            //if (System.IO.File.Exists(path))
-            //{
-            //    virtualPath += ".png";
-            //}
-            //else
-            //{
-            //    path = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{dtoUser.UserId}.jpg";
-            //    if (System.IO.File.Exists(path))
-            //    {
-            //        virtualPath += ".jpg";
-            //    }
-            //    else
-            //    {
-            //        virtualPath = $"/profileImages/default.png";
-            //    }
-            //}
-
-            //return virtualPath;
+           
 
             string virtualPath = $"/profileImages/{dtoUser.UserId}";
             if (dtoUser.ProfilePic==null)
@@ -224,6 +205,46 @@ namespace NailsServer.Controllers
            
 
             return virtualPath;
+        }
+
+        [HttpPost("updateuser")]
+        public IActionResult UpdateUser([FromBody] DTO.User userDto)
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Get model user class from DB with matching email. 
+                Models.User? user = context.GetUser(userEmail);
+                //Clear the tracking of all objects to avoid double tracking
+                context.ChangeTracker.Clear();
+
+                //Check if the user that is logged in is the same user of the task
+                //this situation is ok only if the user is a manager
+                if (user == null || (/*user.IsManager == false && */userDto.UserId != user.UserId))
+                {
+                    return Unauthorized("Failed to update user");
+                }
+
+                Models.User appUser = userDto.GetModel();
+
+                context.Entry(appUser).State = EntityState.Modified;
+
+                context.SaveChanges();
+
+                //Task was updated!
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
     }
 }
