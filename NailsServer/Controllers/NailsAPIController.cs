@@ -3,6 +3,9 @@ using NailsServer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Net;
+using System.Reflection;
 
 
 
@@ -220,20 +223,30 @@ namespace NailsServer.Controllers
                 }
 
                 //Get model user class from DB with matching email. 
-                Models.User? user = context.GetUser(userEmail);
+                Models.User? theUser = context.GetUser(userEmail);
                 //Clear the tracking of all objects to avoid double tracking
                 context.ChangeTracker.Clear();
 
                 //Check if the user that is logged in is the same user of the task
                 //this situation is ok only if the user is a manager
-                if (user == null || (/*user.IsManager == false && */userDto.UserId != user.UserId))
+                if (theUser == null || (/*user.IsManager == false && */userDto.UserId != theUser.UserId))
                 {
                     return Unauthorized("Failed to update user");
                 }
 
                 Models.User appUser = userDto.GetModel();
 
-                context.Entry(appUser).State = EntityState.Modified;
+                context.Entry(theUser).State = EntityState.Modified;
+
+
+                theUser.FirstName = appUser.FirstName;
+                theUser.LastName = appUser.LastName;
+                theUser.Email = appUser.Email;
+                theUser.Pass = appUser.Pass;
+                theUser.DateOfBirth = new DateOnly(appUser.DateOfBirth.Year, appUser.DateOfBirth.Month, appUser.DateOfBirth.Day);
+                theUser.PhoneNumber = appUser.PhoneNumber;
+                theUser.UserAddress = appUser.UserAddress;
+                theUser.Gender = appUser.Gender;
 
                 context.SaveChanges();
 
