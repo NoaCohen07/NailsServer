@@ -96,7 +96,7 @@ GO
 
 Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager) VALUES ('Noa','Cohen','20-mar-2007','noa@gmail.com','0504445751','47 Sunset Lane','F','N12345','0','0','1')
 Go
-Delete From Users Where Email='noa@gmail.com'
+--Delete From Users Where Email='noa@gmail.com'
 --UPDATE Users
 --SET Pass = 'N12345'
 --WHERE Email = 'noa20032007@gmail.com';

@@ -60,6 +60,7 @@ namespace NailsServer.DTO
         {
             Models.User model = new Models.User();
             model.FirstName = this.FirstName;
+            model.UserId = this.UserId;
             model.LastName = this.LastName;
             model.DateOfBirth = this.DateOfBirth;
             model.Email = this.Email;
@@ -69,7 +70,8 @@ namespace NailsServer.DTO
             model.Pass = this.Pass;
             model.IsManicurist = this.IsManicurist;
             model.IsBlocked = this.IsBlocked;
-            model.ProfilePic = this.ProfilePic;
+            string extention = this.ProfilePic.Substring(this.ProfilePic.LastIndexOf(".")).ToLower();
+            model.ProfilePic = extention;
             model.IsManager = this.IsManager;
             return model;
         }

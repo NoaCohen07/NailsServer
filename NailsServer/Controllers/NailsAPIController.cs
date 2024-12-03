@@ -229,24 +229,24 @@ namespace NailsServer.Controllers
 
                 //Check if the user that is logged in is the same user of the task
                 //this situation is ok only if the user is a manager
-                if (theUser == null || (/*user.IsManager == false && */userDto.UserId != theUser.UserId))
+                if (theUser == null || (userDto.UserId != theUser.UserId))
                 {
                     return Unauthorized("Failed to update user");
                 }
 
                 Models.User appUser = userDto.GetModel();
 
-                context.Entry(theUser).State = EntityState.Modified;
+                context.Entry(appUser).State = EntityState.Modified;
 
 
-                theUser.FirstName = appUser.FirstName;
-                theUser.LastName = appUser.LastName;
-                theUser.Email = appUser.Email;
-                theUser.Pass = appUser.Pass;
-                theUser.DateOfBirth = new DateOnly(appUser.DateOfBirth.Year, appUser.DateOfBirth.Month, appUser.DateOfBirth.Day);
-                theUser.PhoneNumber = appUser.PhoneNumber;
-                theUser.UserAddress = appUser.UserAddress;
-                theUser.Gender = appUser.Gender;
+                //theUser.FirstName = appUser.FirstName;
+                //theUser.LastName = appUser.LastName;
+                //theUser.Email = appUser.Email;
+                //theUser.Pass = appUser.Pass;
+                //theUser.DateOfBirth = new DateOnly(appUser.DateOfBirth.Year, appUser.DateOfBirth.Month, appUser.DateOfBirth.Day);
+                //theUser.PhoneNumber = appUser.PhoneNumber;
+                //theUser.UserAddress = appUser.UserAddress;
+                //theUser.Gender = appUser.Gender;
 
                 context.SaveChanges();
 
