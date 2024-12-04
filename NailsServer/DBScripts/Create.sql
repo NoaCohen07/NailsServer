@@ -100,6 +100,8 @@ Go
 --UPDATE Users
 --SET Pass = 'N12345'
 --WHERE Email = 'noa20032007@gmail.com';
-Select * From Users
+Select * From Post
 Go
+
+Insert into Post (UserID, PostText,PostTime,Pic) VALUES ('1','Love Love Love','2018-03-22 00:00:00','.jpg')
 --scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=NailsDB;User ID=NailsLogin;Password=12345;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context NailsDbContext -DataAnnotations –force

@@ -19,6 +19,7 @@ namespace NailsServer.DTO
     
         public int PostId { get; set; }
 
+        public string PostPicturePath { get; set; } = null!;
 
         //public virtual Favorite? Favorite { get; set; }
 
