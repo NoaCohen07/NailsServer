@@ -70,8 +70,12 @@ namespace NailsServer.DTO
             model.Pass = this.Pass;
             model.IsManicurist = this.IsManicurist;
             model.IsBlocked = this.IsBlocked;
-            string extention = this.ProfilePic.Substring(this.ProfilePic.LastIndexOf(".")).ToLower();
-            model.ProfilePic = extention;
+            if (this.ProfilePic != null)
+            {
+                string extention = this.ProfilePic.Substring(this.ProfilePic.LastIndexOf(".")).ToLower();
+                model.ProfilePic = extention;
+            }
+            
             model.IsManager = this.IsManager;
             return model;
         }

@@ -200,11 +200,13 @@ namespace NailsServer.Controllers
         {
   
             string virtualPath = $"/profileImages/{dtoUser.UserId}";
-            if (dtoUser.ProfilePic==null)
+            if (dtoUser.ProfilePic == null)
             {
                 virtualPath = $"/profileImages/default.jpg";
             }
-           
+            else
+                virtualPath += dtoUser.ProfilePic;
+
 
             return virtualPath;
         }
