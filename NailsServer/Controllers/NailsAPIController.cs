@@ -355,6 +355,63 @@ namespace NailsServer.Controllers
             }
 
         }
+
+        [HttpGet("GetPostComments")]
+        public IActionResult GetPostComments([FromQuery] int postId)
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read posts of the user
+
+                List<Comment> list = context.GetComments(postId);
+
+                List<DTO.Comment> comments = new List<DTO.Comment>();
+
+                foreach (Comment c in list)
+                {
+                    DTO.Comment comment = new DTO.Comment(c);
+                    //post.PostPicturePath = $"/postsImages/{post.PostId}{p.Pic}";
+                    comments.Add(comment);
+                }
+                return Ok(comments);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet("GetLikes")]
+        public IActionResult GetLikes([FromQuery] int postId)
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read posts of the user
+
+                int likes = context.GetNumLikes(postId);
+                return Ok(likes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }
 

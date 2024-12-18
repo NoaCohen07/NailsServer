@@ -18,5 +18,17 @@ public partial class NailsDbContext : DbContext
         return this.Posts.Where(p => p.UserId == u.UserId).OrderByDescending(p => p.PostTime).ToList();
                             
     }
+
+    public List<Comment> GetComments(int postId)
+    {
+        return this.Comments.Where(c => c.PostId==postId).OrderByDescending(c => c.CommentTime).ToList();
+
+    }
+
+    public int GetNumLikes (int postId)
+    {
+        return this.Likes.Where(c => c.PostId == postId).Count();
+
+    }
 }
 
