@@ -12,6 +12,12 @@ public partial class NailsDbContext : DbContext
                             .FirstOrDefault();
     }
 
+    public User? GetUser(int id)
+    {
+        return this.Users.Where(u => u.UserId == id)
+                            .FirstOrDefault();
+    }
+
     public List<Post> GetPosts(string email)
     {
         User? u = GetUser(email);

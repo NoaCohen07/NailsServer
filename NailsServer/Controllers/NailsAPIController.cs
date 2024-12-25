@@ -412,6 +412,30 @@ namespace NailsServer.Controllers
             }
 
         }
+
+        [HttpGet("GetUser")]
+        public IActionResult GetUser([FromQuery] int userId)
+        {
+            try
+            {
+                //Check who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read posts of the user
+
+                User u = context.GetUser(userId);
+                return Ok(u);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }
 
