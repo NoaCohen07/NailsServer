@@ -464,6 +464,34 @@ namespace NailsServer.Controllers
             }
 
         }
+
+        [HttpPost("AddPost")]
+        public IActionResult AddPost([FromBody] DTO.Post p)
+        {
+            try
+            {
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Create model user class
+                Models.Post post = p.GetModel();
+
+                context.Posts.Add(post);
+                context.SaveChanges();
+
+                //Post was added!
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
     }
 }
 
