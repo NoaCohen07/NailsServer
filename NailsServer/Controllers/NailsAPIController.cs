@@ -96,7 +96,7 @@ namespace NailsServer.Controllers
         public async Task<IActionResult> UploadProfileImageAsync(IFormFile file)
         {
             //Check if who is logged in
-            //string extention1 = "";
+
             string? userEmail = HttpContext.Session.GetString("loggedInUser");
             if (string.IsNullOrEmpty(userEmail))
             {
@@ -429,6 +429,34 @@ namespace NailsServer.Controllers
 
                 User u = context.GetUser(userId);
                 return Ok(u);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpPost("AddComment")]
+        public IActionResult AddComment([FromBody] DTO.Comment c)
+        {
+            try
+            {
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Create model user class
+                Models.Comment comment = c.GetModel();
+
+                context.Comments.Add(comment);
+                context.SaveChanges();
+
+                //Comment was added!
+              
+                return Ok();
             }
             catch (Exception ex)
             {
