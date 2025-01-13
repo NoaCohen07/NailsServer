@@ -483,8 +483,41 @@ namespace NailsServer.Controllers
                 context.SaveChanges();
 
                 //Post was added!
+                 
+                return Ok(p);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-                return Ok();
+        }
+
+        [HttpGet("GetManicurists")]
+        public IActionResult GetManicurists()
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read all manicurists
+
+                List<User> list = context.GetManicurists();
+
+                List<DTO.User> manicurists = new List<DTO.User>();
+
+                foreach (User u in list)
+                {
+                    DTO.User user = new DTO.User(u);
+                    
+                    manicurists.Add(user);
+                }
+                return Ok(manicurists);
             }
             catch (Exception ex)
             {

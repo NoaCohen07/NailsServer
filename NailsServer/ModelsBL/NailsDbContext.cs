@@ -36,5 +36,10 @@ public partial class NailsDbContext : DbContext
         return this.Likes.Where(c => c.PostId == postId).Count();
 
     }
+
+    public List<User> GetManicurists()
+    {
+        return this.Users.Where(u => u.IsManicurist == true).ToList();
+    }
 }
 

@@ -96,11 +96,13 @@ GO
 
 Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager) VALUES ('Noa','Cohen','20-mar-2007','noa@gmail.com','0504445751','47 Sunset Lane','F','N12345','0','0','1')
 Go
+
+Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager) VALUES ('Ori','Geva','20-mar-2007','ori@gmail.com','0504445751','47 Sunset Lane','F','N12345','1','0','1')
 --Delete From Users Where Email='noa@gmail.com'
 UPDATE Users
 SET ProfilePic = null
 WHERE Email = 'noa@gmail.com';
-Select * From Comment
+Select * From Users
 Go
 
 Insert into Post (UserID, PostText,PostTime,Pic) VALUES ('1','Love ','2018-03-22 00:00:00','.jpg')
