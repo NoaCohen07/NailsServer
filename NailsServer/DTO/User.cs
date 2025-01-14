@@ -37,6 +37,8 @@ namespace NailsServer.DTO
         public string? ProfilePic { get; set; }
 
         public bool IsManager { get; set; }
+        public string ProfileImagePath { get; set; } = null!;
+        public string FullProfileImagePath { get; set; } = null!;
 
         public User() { }
         public User(Models.User modelUser)

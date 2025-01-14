@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Net;
 using System.Reflection;
+using NailsServer.DTO;
 
 
 
@@ -324,7 +325,7 @@ namespace NailsServer.Controllers
 
 
         [HttpGet("GetPosts")]
-        public IActionResult GetPosts()
+        public IActionResult GetPosts([FromQuery] string email)
         {
             try
             {
@@ -337,13 +338,14 @@ namespace NailsServer.Controllers
 
                 //Read posts of the user
 
-                List<Post> list = context.GetPosts(userEmail);
+                List<Models.Post> list = context.GetPosts(email);
 
                 List<DTO.Post> posts = new List<DTO.Post>();
                 
-                foreach(Post p in list)
+                foreach(Models.Post p in list)
                 {
                     DTO.Post post = new DTO.Post(p);
+                    
                     post.PostPicturePath = $"/postsImages/{post.PostId}{p.Pic}";
                     posts.Add(post);
                 }
@@ -370,11 +372,11 @@ namespace NailsServer.Controllers
 
                 //Read posts of the user
 
-                List<Comment> list = context.GetComments(postId);
+                List<Models.Comment> list = context.GetComments(postId);
 
                 List<DTO.Comment> comments = new List<DTO.Comment>();
 
-                foreach (Comment c in list)
+                foreach (Models.Comment c in list)
                 {
                     DTO.Comment comment = new DTO.Comment(c);
                     //post.PostPicturePath = $"/postsImages/{post.PostId}{p.Pic}";
@@ -427,8 +429,9 @@ namespace NailsServer.Controllers
 
                 //Read posts of the user
 
-                User u = context.GetUser(userId);
-                return Ok(u);
+                Models.User u = context.GetUser(userId);
+                DTO.User user= new DTO.User(u);
+                return Ok(user);
             }
             catch (Exception ex)
             {
@@ -507,14 +510,22 @@ namespace NailsServer.Controllers
 
                 //Read all manicurists
 
-                List<User> list = context.GetManicurists();
+                List<Models.User> list = context.GetManicurists();
 
                 List<DTO.User> manicurists = new List<DTO.User>();
 
-                foreach (User u in list)
+                foreach (Models.User u in list)
                 {
                     DTO.User user = new DTO.User(u);
-                    
+                    if (user.ProfilePic == null)
+                    {
+                        user.ProfileImagePath = $"/profileImages/default.jpg";
+                    }
+                    else
+                    {
+                        user.ProfileImagePath = $"/profileImages/{user.UserId}{user.ProfilePic}";
+                    }
+                   
                     manicurists.Add(user);
                 }
                 return Ok(manicurists);
