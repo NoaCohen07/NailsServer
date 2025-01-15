@@ -33,11 +33,11 @@ namespace NailsServer.DTO
 
         public bool IsBlocked { get; set; }
 
- 
-        public string? ProfilePic { get; set; }
+
+        public string ProfilePic { get; set; } = null!;
 
         public bool IsManager { get; set; }
-        public string ProfileImagePath { get; set; } = null!;
+       
         public string FullProfileImagePath { get; set; } = null!;
 
         public User() { }
@@ -72,12 +72,7 @@ namespace NailsServer.DTO
             model.Pass = this.Pass;
             model.IsManicurist = this.IsManicurist;
             model.IsBlocked = this.IsBlocked;
-            if (this.ProfilePic != null)
-            {
-                string extention = this.ProfilePic.Substring(this.ProfilePic.LastIndexOf(".")).ToLower();
-                model.ProfilePic = extention;
-            }
-            
+            model.ProfilePic = this.ProfilePic;
             model.IsManager = this.IsManager;
             return model;
         }

@@ -57,7 +57,7 @@ namespace NailsServer.Controllers
                 DTO.User dtoUser = new DTO.User(modelsUser);
                 //profile img
                 //dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser.UserId);
-                dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser);
+                //dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser);
                 return Ok(dtoUser);
             }
             catch (Exception ex)
@@ -76,14 +76,14 @@ namespace NailsServer.Controllers
 
                 //Create model user class
                 Models.User modelsUser = userDto.GetModel();
-
+                modelsUser.ProfilePic = "//profileImages/default.jpg";
                 context.Users.Add(modelsUser);
                 context.SaveChanges();
 
                 //User was added!
                 DTO.User dtoUser = new DTO.User(modelsUser);
                 //profile pic
-                dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser);
+                //dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser);
                 return Ok(dtoUser);
             }
             catch (Exception ex)
@@ -127,7 +127,7 @@ namespace NailsServer.Controllers
                 if (file.FileName.LastIndexOf(".") > 0)
                 {
                     extention = file.FileName.Substring(file.FileName.LastIndexOf(".")).ToLower();
-                    user.ProfilePic = extention;
+                    user.ProfilePic = $"\\profileImages\\{user.UserId}{extention}";
                 }
                 if (!allowedExtentions.Where(e => e == extention).Any())
                 {
@@ -156,11 +156,11 @@ namespace NailsServer.Controllers
 
             }
             //Update image extention in DB
+            
             context.Entry(user).State = EntityState.Modified;
             context.SaveChanges();
+
             DTO.User dtoUser = new DTO.User(user);
-            dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser);
-           
             return Ok(dtoUser);
         }
 
@@ -195,22 +195,22 @@ namespace NailsServer.Controllers
             return false;
         }
 
-        //this function check which profile image exist and return the virtual path of it.
-        //if it does not exist it returns the default profile image virtual path
-        private string GetProfileImageVirtualPath(DTO.User dtoUser)
-        {
+        ////this function check which profile image exist and return the virtual path of it.
+        ////if it does not exist it returns the default profile image virtual path
+        //private string GetProfileImageVirtualPath(DTO.User dtoUser)
+        //{
   
-            string virtualPath = $"/profileImages/{dtoUser.UserId}";
-            if (dtoUser.ProfilePic == null)
-            {
-                virtualPath = $"/profileImages/default.jpg";
-            }
-            else
-                virtualPath += dtoUser.ProfilePic;
+        //    string virtualPath = $"/profileImages/{dtoUser.UserId}";
+        //    if (dtoUser.ProfilePic == null)
+        //    {
+        //        virtualPath = $"/profileImages/default.jpg";
+        //    }
+        //    else
+        //        virtualPath += dtoUser.ProfilePic;
 
 
-            return virtualPath;
-        }
+        //    return virtualPath;
+        //}
 
         [HttpPost("updateuser")]
         public IActionResult UpdateUser([FromBody] DTO.User userDto)
@@ -252,76 +252,76 @@ namespace NailsServer.Controllers
 
         }
 
-        [HttpPost("UploadPostImage")]
-        public async Task<IActionResult> UploadPostImageAsync(IFormFile file, [FromQuery] int postId)
-        {
-            //Check who is logged in
+        //[HttpPost("UploadPostImage")]
+        //public async Task<IActionResult> UploadPostImageAsync(IFormFile file, [FromQuery] int postId)
+        //{
+        //    //Check who is logged in
             
-            string? userEmail = HttpContext.Session.GetString("loggedInUser");
-            if (string.IsNullOrEmpty(userEmail))
-            {
-                return Unauthorized("User is not logged in");
-            }
+        //    string? userEmail = HttpContext.Session.GetString("loggedInUser");
+        //    if (string.IsNullOrEmpty(userEmail))
+        //    {
+        //        return Unauthorized("User is not logged in");
+        //    }
 
-            //Get model user class from DB with matching email. 
-            Models.User? user = context.GetUser(userEmail);
-            //Clear the tracking of all objects to avoid double tracking
-            context.ChangeTracker.Clear();
+        //    //Get model user class from DB with matching email. 
+        //    Models.User? user = context.GetUser(userEmail);
+        //    //Clear the tracking of all objects to avoid double tracking
+        //    context.ChangeTracker.Clear();
 
-            if (user == null)
-            {
-                return Unauthorized("User is not found in the database");
-            }
+        //    if (user == null)
+        //    {
+        //        return Unauthorized("User is not found in the database");
+        //    }
 
 
-            //Read all files sent
-            long imagesSize = 0;
+        //    //Read all files sent
+        //    long imagesSize = 0;
 
-            if (file.Length > 0)
-            {
-                //Check the file extention!
-                string[] allowedExtentions = { ".png", ".jpg" };
-                string extention = "";
+        //    if (file.Length > 0)
+        //    {
+        //        //Check the file extention!
+        //        string[] allowedExtentions = { ".png", ".jpg" };
+        //        string extention = "";
 
-                if (file.FileName.LastIndexOf(".") > 0)
-                {
-                    extention = file.FileName.Substring(file.FileName.LastIndexOf(".")).ToLower();
-                    user.ProfilePic = extention;
-                }
-                if (!allowedExtentions.Where(e => e == extention).Any())
-                {
-                    //Extention is not supported
-                    return BadRequest("File sent with non supported extention");
-                }
+        //        if (file.FileName.LastIndexOf(".") > 0)
+        //        {
+        //            extention = file.FileName.Substring(file.FileName.LastIndexOf(".")).ToLower();
+        //            user.ProfilePic = extention;
+        //        }
+        //        if (!allowedExtentions.Where(e => e == extention).Any())
+        //        {
+        //            //Extention is not supported
+        //            return BadRequest("File sent with non supported extention");
+        //        }
 
-                //Build path in the web root (better to a specific folder under the web root
-                string filePath = $"{this.webHostEnvironment.WebRootPath}\\postsImages\\{postId}{extention}";
+        //        //Build path in the web root (better to a specific folder under the web root
+        //        string filePath = $"{this.webHostEnvironment.WebRootPath}\\postsImages\\{postId}{extention}";
 
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    await file.CopyToAsync(stream);
+        //        using (var stream = System.IO.File.Create(filePath))
+        //        {
+        //            await file.CopyToAsync(stream);
 
-                    if (IsImage(stream))
-                    {
-                        imagesSize += stream.Length;
-                    }
-                    else
-                    {
-                        //Delete the file if it is not supported!
-                        System.IO.File.Delete(filePath);
-                    }
+        //            if (IsImage(stream))
+        //            {
+        //                imagesSize += stream.Length;
+        //            }
+        //            else
+        //            {
+        //                //Delete the file if it is not supported!
+        //                System.IO.File.Delete(filePath);
+        //            }
 
-                }
+        //        }
 
-            }
-            //Update image extention in DB
-            context.Entry(user).State = EntityState.Modified;
-            context.SaveChanges();
-            DTO.Post post = new DTO.Post();
-           // post.PostPicturePath = GetImageVirtualPath(dtoUser);
+        //    }
+        //    //Update image extention in DB
+        //    context.Entry(user).State = EntityState.Modified;
+        //    context.SaveChanges();
+        //    DTO.Post post = new DTO.Post();
+        //   // post.PostPicturePath = GetImageVirtualPath(dtoUser);
 
-            return Ok(post);
-        }
+        //    return Ok(post);
+        //}
 
 
         [HttpGet("GetPosts")]
@@ -517,14 +517,14 @@ namespace NailsServer.Controllers
                 foreach (Models.User u in list)
                 {
                     DTO.User user = new DTO.User(u);
-                    if (user.ProfilePic == null)
-                    {
-                        user.ProfileImagePath = $"/profileImages/default.jpg";
-                    }
-                    else
-                    {
-                        user.ProfileImagePath = $"/profileImages/{user.UserId}{user.ProfilePic}";
-                    }
+                    //if (user.ProfilePic == null)
+                    //{
+                    //    user.ProfilePic = $"/profileImages/default.jpg";
+                    //}
+                    //else
+                    //{
+                    //    user.ProfilePic = $"/profileImages/{user.UserId}{user.ProfilePic}";
+                    //}
                    
                     manicurists.Add(user);
                 }

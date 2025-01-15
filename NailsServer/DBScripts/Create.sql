@@ -25,7 +25,7 @@ Gender char NOT NULL,
 Pass nvarchar(20) NOT NULL,
 IsManicurist bit NOT NULL,
 IsBlocked bit NOT NULL,
-ProfilePic nvarchar (5),
+ProfilePic nvarchar (50) NOT NULL,
 IsManager bit default 0 NOT Null
 )
 
@@ -94,10 +94,10 @@ GO
 ALTER ROLE db_owner ADD MEMBER [NailsUser]
 GO
 
-Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager) VALUES ('Noa','Cohen','20-mar-2007','noa@gmail.com','0504445751','47 Sunset Lane','F','N12345','0','0','1')
+Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('Noa','Cohen','20-mar-2007','noa@gmail.com','0504445751','47 Sunset Lane','F','N12345','0','0','1','/profileImages/1.jpg')
 Go
 
-Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager) VALUES ('marom','batzir','20-mar-2007','marom@gmail.com','0504445751','47 Sunset Lane','F','N12345','1','0','1')
+Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('marom','batzir','20-mar-2007','marom@gmail.com','0504445751','47 Sunset Lane','F','N12345','1','0','1','/profileImages/2.jpg')
 --Delete From Users Where Email='noa@gmail.com'
 UPDATE Users
 SET ProfilePic = null

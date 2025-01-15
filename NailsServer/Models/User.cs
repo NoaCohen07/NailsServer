@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NailsServer.Models;
 
-[Index("Email", Name = "UQ__Users__A9D105346FC304A6", IsUnique = true)]
+[Index("Email", Name = "UQ__Users__A9D10534925A8033", IsUnique = true)]
 public partial class User
 {
     [Key]
@@ -41,8 +41,8 @@ public partial class User
 
     public bool IsBlocked { get; set; }
 
-    [StringLength(5)]
-    public string? ProfilePic { get; set; }
+    [StringLength(50)]
+    public string ProfilePic { get; set; } = null!;
 
     public bool IsManager { get; set; }
 
