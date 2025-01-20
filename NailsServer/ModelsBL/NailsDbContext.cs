@@ -18,6 +18,11 @@ public partial class NailsDbContext : DbContext
                             .FirstOrDefault();
     }
 
+    public Post? GetPost(int id)
+    {
+        return this.Posts.Where(p => p.PostId == id)
+                            .FirstOrDefault();
+    }
     public List<Post> GetPosts(string email)
     {
         User? u = GetUser(email);
@@ -40,6 +45,16 @@ public partial class NailsDbContext : DbContext
     public List<User> GetManicurists()
     {
         return this.Users.Where(u => u.IsManicurist == true).ToList();
+    }
+
+    public List<User> GetUsers()
+    {
+        return this.Users.ToList();
+    }
+
+    public List<Post> GetAllPosts()
+    {
+        return this.Posts.ToList();
     }
 }
 

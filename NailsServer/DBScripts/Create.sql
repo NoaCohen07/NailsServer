@@ -47,7 +47,7 @@ Create Table Post
 UserID int Foreign Key References Users(UserID),
 PostTime datetime NOT NULL,
 PostText nvarchar(300),
-Pic nvarchar(5) NOT NULL,
+Pic nvarchar(50) NOT NULL,
 PostID int Primary Key Identity (1,1) NOT NULL
 )
 
@@ -97,15 +97,18 @@ GO
 Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('Noa','Cohen','20-mar-2007','noa@gmail.com','0504445751','47 Sunset Lane','F','N12345','0','0','1','/profileImages/1.jpg')
 Go
 
-Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('marom','batzir','20-mar-2007','marom@gmail.com','0504445751','47 Sunset Lane','F','N12345','1','0','1','/profileImages/2.jpg')
+Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('amit','batzir','20-mar-2007','amit@gmail.com','0504445751','47 Sunset Lane','F','N12345','1','0','1','/profileImages/3.jpg')
 --Delete From Users Where Email='noa@gmail.com'
-UPDATE Users
-SET ProfilePic = null
-WHERE Email = 'noa@gmail.com';
-Select * From Users
+--UPDATE Users
+--SET ProfilePic = null
+--WHERE Email = 'noa@gmail.com';
+Select * From Post
 Go
-
-Insert into Post (UserID, PostText,PostTime,Pic) VALUES ('1','Love ','2018-03-22 00:00:00','.jpg')
+UPDATE Post
+SET Pic='/postsImages/1.jpg'
+WHERE PostID = 1;
+Insert into Post (UserID, PostText,PostTime,Pic) VALUES ('1','Love ','2018-03-22 00:00:00','/postsImages/1.jpg')
 
 Insert into Comment (PostID, CommentTime, CommentText, UserID) Values ('1','2018-03-22 00:00:00','Noa is amazing','1')
+
 --scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=NailsDB;User ID=NailsLogin;Password=12345;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context NailsDbContext -DataAnnotations –force

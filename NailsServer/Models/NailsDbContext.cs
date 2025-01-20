@@ -37,7 +37,7 @@ public partial class NailsDbContext : DbContext
     {
         modelBuilder.Entity<ChatMessage>(entity =>
         {
-            entity.HasKey(e => e.MessageId).HasName("PK__ChatMess__C87C037C22B7D5C7");
+            entity.HasKey(e => e.MessageId).HasName("PK__ChatMess__C87C037C100B72C1");
 
             entity.HasOne(d => d.Receiver).WithMany(p => p.ChatMessageReceivers).HasConstraintName("FK__ChatMessa__Recei__2A4B4B5E");
 
@@ -46,14 +46,14 @@ public partial class NailsDbContext : DbContext
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFAA7A9E24BB");
+            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFAAE33D855E");
 
             entity.HasOne(d => d.Post).WithMany(p => p.Comments).HasConstraintName("FK__Comment__PostID__33D4B598");
         });
 
         modelBuilder.Entity<Favorite>(entity =>
         {
-            entity.HasKey(e => e.PostId).HasName("PK__Favorite__AA12603805F89214");
+            entity.HasKey(e => e.PostId).HasName("PK__Favorite__AA1260389AE54315");
 
             entity.Property(e => e.PostId).ValueGeneratedOnAdd();
 
@@ -66,7 +66,7 @@ public partial class NailsDbContext : DbContext
 
         modelBuilder.Entity<Like>(entity =>
         {
-            entity.HasKey(e => new { e.PostId, e.UserId }).HasName("PK__Likes__7B6AECF204AD0538");
+            entity.HasKey(e => new { e.PostId, e.UserId }).HasName("PK__Likes__7B6AECF2C36C3CE2");
 
             entity.HasOne(d => d.Post).WithMany(p => p.Likes)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -75,21 +75,21 @@ public partial class NailsDbContext : DbContext
 
         modelBuilder.Entity<Post>(entity =>
         {
-            entity.HasKey(e => e.PostId).HasName("PK__Post__AA126038B60D3933");
+            entity.HasKey(e => e.PostId).HasName("PK__Post__AA126038A02A2406");
 
             entity.HasOne(d => d.User).WithMany(p => p.Posts).HasConstraintName("FK__Post__UserID__2D27B809");
         });
 
         modelBuilder.Entity<Treatment>(entity =>
         {
-            entity.HasKey(e => e.TreatmentId).HasName("PK__Treatmen__1A57B71185925676");
+            entity.HasKey(e => e.TreatmentId).HasName("PK__Treatmen__1A57B71109614577");
 
             entity.HasOne(d => d.User).WithMany(p => p.Treatments).HasConstraintName("FK__Treatment__UserI__398D8EEE");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC20FE3BCC");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCACCFB26C14");
 
             entity.Property(e => e.DateOfBirth).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.Gender).IsFixedLength();

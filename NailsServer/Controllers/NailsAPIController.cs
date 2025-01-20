@@ -252,76 +252,76 @@ namespace NailsServer.Controllers
 
         }
 
-        //[HttpPost("UploadPostImage")]
-        //public async Task<IActionResult> UploadPostImageAsync(IFormFile file, [FromQuery] int postId)
-        //{
-        //    //Check who is logged in
-            
-        //    string? userEmail = HttpContext.Session.GetString("loggedInUser");
-        //    if (string.IsNullOrEmpty(userEmail))
-        //    {
-        //        return Unauthorized("User is not logged in");
-        //    }
+        [HttpPost("UploadPostImage")]
+        public async Task<IActionResult> UploadPostImageAsync(IFormFile file, [FromQuery] int postId)
+        {
 
-        //    //Get model user class from DB with matching email. 
-        //    Models.User? user = context.GetUser(userEmail);
-        //    //Clear the tracking of all objects to avoid double tracking
-        //    context.ChangeTracker.Clear();
+            //Check if who is logged in
 
-        //    if (user == null)
-        //    {
-        //        return Unauthorized("User is not found in the database");
-        //    }
+            string? userEmail = HttpContext.Session.GetString("loggedInUser");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized("User is not logged in");
+            }
+
+            //Get model user class from DB with matching email. 
+            Models.Post? post = context.GetPost(postId);
+            //Clear the tracking of all objects to avoid double tracking
+            context.ChangeTracker.Clear();
+
+            if (post == null)
+            {
+                return Unauthorized("Post is not found in the database");
+            }
 
 
-        //    //Read all files sent
-        //    long imagesSize = 0;
+            //Read all files sent
+            long imagesSize = 0;
 
-        //    if (file.Length > 0)
-        //    {
-        //        //Check the file extention!
-        //        string[] allowedExtentions = { ".png", ".jpg" };
-        //        string extention = "";
+            if (file.Length > 0)
+            {
+                //Check the file extention!
+                string[] allowedExtentions = { ".png", ".jpg" };
+                string extention = "";
 
-        //        if (file.FileName.LastIndexOf(".") > 0)
-        //        {
-        //            extention = file.FileName.Substring(file.FileName.LastIndexOf(".")).ToLower();
-        //            user.ProfilePic = extention;
-        //        }
-        //        if (!allowedExtentions.Where(e => e == extention).Any())
-        //        {
-        //            //Extention is not supported
-        //            return BadRequest("File sent with non supported extention");
-        //        }
+                if (file.FileName.LastIndexOf(".") > 0)
+                {
+                    extention = file.FileName.Substring(file.FileName.LastIndexOf(".")).ToLower();
+                    post.Pic = $"/postsImages/{postId}{extention}";
+                }
+                if (!allowedExtentions.Where(e => e == extention).Any())
+                {
+                    //Extention is not supported
+                    return BadRequest("File sent with non supported extention");
+                }
 
-        //        //Build path in the web root (better to a specific folder under the web root
-        //        string filePath = $"{this.webHostEnvironment.WebRootPath}\\postsImages\\{postId}{extention}";
+                //Build path in the web root (better to a specific folder under the web root
+                string filePath = $"{this.webHostEnvironment.WebRootPath}/postsImages/{postId}{extention}";
 
-        //        using (var stream = System.IO.File.Create(filePath))
-        //        {
-        //            await file.CopyToAsync(stream);
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await file.CopyToAsync(stream);
 
-        //            if (IsImage(stream))
-        //            {
-        //                imagesSize += stream.Length;
-        //            }
-        //            else
-        //            {
-        //                //Delete the file if it is not supported!
-        //                System.IO.File.Delete(filePath);
-        //            }
+                    if (IsImage(stream))
+                    {
+                        imagesSize += stream.Length;
+                    }
+                    else
+                    {
+                        //Delete the file if it is not supported!
+                        System.IO.File.Delete(filePath);
+                    }
 
-        //        }
+                }
+            }
+            //Update image extention in DB
+            context.Entry(post).State = EntityState.Modified;
+            context.SaveChanges();
+            DTO.Post p = new DTO.Post(post);
+            // post.PostPicturePath = GetImageVirtualPath(dtoUser);
 
-        //    }
-        //    //Update image extention in DB
-        //    context.Entry(user).State = EntityState.Modified;
-        //    context.SaveChanges();
-        //    DTO.Post post = new DTO.Post();
-        //   // post.PostPicturePath = GetImageVirtualPath(dtoUser);
-
-        //    return Ok(post);
-        //}
+            return Ok(p);
+        }
 
 
         [HttpGet("GetPosts")]
@@ -481,7 +481,8 @@ namespace NailsServer.Controllers
 
                 //Create model user class
                 Models.Post post = p.GetModel();
-
+                //post.ProfilePic = $"\\profileImages\\{user.UserId}{extention}";
+                p.PostPicturePath=$"/postsImages/{p.PostId}{p.Pic}";
                 context.Posts.Add(post);
                 context.SaveChanges();
 
@@ -529,6 +530,72 @@ namespace NailsServer.Controllers
                     manicurists.Add(user);
                 }
                 return Ok(manicurists);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet("GetUsers")]
+        public IActionResult GetUsers()
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read all users
+
+                List<Models.User> list = context.GetUsers();
+
+                List<DTO.User> users = new List<DTO.User>();
+
+                foreach (Models.User u in list)
+                {
+                    DTO.User user = new DTO.User(u);
+
+                    users.Add(user);
+                }
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet("GetAllPosts")]
+        public IActionResult GetAllPosts()
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read all posts
+
+                List<Models.Post> list = context.GetAllPosts();
+
+                List<DTO.Post> allPosts = new List<DTO.Post>();
+
+                foreach (Models.Post p in list)
+                {
+                    DTO.Post post = new DTO.Post(p);
+
+                    allPosts.Add(post);
+                }
+                return Ok(allPosts);
             }
             catch (Exception ex)
             {

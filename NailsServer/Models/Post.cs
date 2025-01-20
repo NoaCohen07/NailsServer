@@ -18,7 +18,7 @@ public partial class Post
     [StringLength(300)]
     public string? PostText { get; set; }
 
-    [StringLength(5)]
+    [StringLength(50)]
     public string Pic { get; set; } = null!;
 
     [Key]
