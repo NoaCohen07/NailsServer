@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NailsServer.Models;
 
+[PrimaryKey("UserId", "PostId")]
 public partial class Favorite
 {
+    [Key]
     [Column("UserID")]
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
     [Key]
     [Column("PostID")]
@@ -19,10 +21,10 @@ public partial class Favorite
     public DateTime SavedTime { get; set; }
 
     [ForeignKey("PostId")]
-    [InverseProperty("Favorite")]
+    [InverseProperty("Favorites")]
     public virtual Post Post { get; set; } = null!;
 
     [ForeignKey("UserId")]
     [InverseProperty("Favorites")]
-    public virtual User? User { get; set; }
+    public virtual User User { get; set; } = null!;
 }

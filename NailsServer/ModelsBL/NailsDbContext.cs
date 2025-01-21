@@ -26,8 +26,24 @@ public partial class NailsDbContext : DbContext
     public List<Post> GetPosts(string email)
     {
         User? u = GetUser(email);
-        return this.Posts.Where(p => p.UserId == u.UserId).OrderByDescending(p => p.PostTime).ToList();
+        if (u != null) 
+        {
+            return this.Posts.Where(p => p.UserId == u.UserId).OrderByDescending(p => p.PostTime).ToList();
+        }
+        else
+        {
+            return new List<Post>();
+        }
+        
                             
+    }
+    public List<Post> GetFavorites(string email)
+    {
+        User? u = GetUser(email);
+        if (u != null)
+            return this.Posts.Where(p => p.Favorites.Where(ff => ff.UserId == u.UserId).Any()).OrderByDescending(p => p.PostTime).ToList();
+        else
+            return new List<Post>();
     }
 
     public List<Comment> GetComments(int postId)

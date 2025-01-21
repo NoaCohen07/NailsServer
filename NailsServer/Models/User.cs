@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NailsServer.Models;
 
-[Index("Email", Name = "UQ__Users__A9D1053456A72FC2", IsUnique = true)]
+[Index("Email", Name = "UQ__Users__A9D10534947CE596", IsUnique = true)]
 public partial class User
 {
     [Key]

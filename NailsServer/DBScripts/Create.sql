@@ -53,10 +53,12 @@ PostID int Primary Key Identity (1,1) NOT NULL
 
 Create Table Favorites
 (
-UserID int Foreign Key References Users(UserID),
-PostID int Primary Key Identity(1,1) NOT NULL,
+UserID int,
+PostID int,
 SavedTime datetime NOT NULL,
-Foreign Key (PostID) References Post(PostID)
+Foreign Key (PostID) References Post(PostID),
+Foreign Key (UserID) References Users(UserID),
+Primary key (UserID, PostID)
 )
 
 Create Table Comment
@@ -104,6 +106,7 @@ Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,
 --WHERE Email = 'noa@gmail.com';
 Select * From Post
 Go
+Delete From Post Where PostID=9
 UPDATE Post
 SET Pic='/postsImages/1.jpg'
 WHERE PostID = 1;

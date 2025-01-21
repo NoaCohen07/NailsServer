@@ -346,7 +346,7 @@ namespace NailsServer.Controllers
                 {
                     DTO.Post post = new DTO.Post(p);
                     
-                    post.PostPicturePath = $"/postsImages/{post.PostId}{p.Pic}";
+                    //post.Pic = $"/postsImages/{post.PostId}{p.Pic}";
                     posts.Add(post);
                 }
                 return Ok(posts);
@@ -482,13 +482,13 @@ namespace NailsServer.Controllers
                 //Create model user class
                 Models.Post post = p.GetModel();
                 //post.ProfilePic = $"\\profileImages\\{user.UserId}{extention}";
-                p.PostPicturePath=$"/postsImages/{p.PostId}{p.Pic}";
+                //p.PostPicturePath=$"/postsImages/{p.PostId}{p.Pic}";
                 context.Posts.Add(post);
                 context.SaveChanges();
-
+                DTO.Post newPost = new DTO.Post(post);
                 //Post was added!
                  
-                return Ok(p);
+                return Ok(newPost);
             }
             catch (Exception ex)
             {
@@ -596,6 +596,68 @@ namespace NailsServer.Controllers
                     allPosts.Add(post);
                 }
                 return Ok(allPosts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet("GetFavorites")]
+        public IActionResult GetFavorites()
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read all posts
+
+                List<Models.Post> list = context.GetFavorites(userEmail);
+              
+
+                List<DTO.Post> allPosts = new List<DTO.Post>();
+
+                foreach (Models.Post p in list)
+                {
+                    DTO.Post post = new DTO.Post(p);
+
+                    allPosts.Add(post);
+                }
+                return Ok(allPosts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpPost("AddFavorite")]
+        public IActionResult AddFavorite([FromBody] DTO.Favorite f)
+        {
+            try
+            {
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Create model user class
+                Models.Favorite fav = f.GetModel();
+
+                context.Favorites.Add(fav);
+                context.SaveChanges();
+                DTO.Favorite newFavorite = new DTO.Favorite(fav);
+                //Post was added!
+
+                return Ok(newFavorite);
             }
             catch (Exception ex)
             {

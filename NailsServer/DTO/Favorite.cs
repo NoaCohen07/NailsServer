@@ -6,7 +6,7 @@ namespace NailsServer.DTO
     public class Favorite
     {
        
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
 
     
         public int PostId { get; set; }

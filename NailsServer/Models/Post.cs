@@ -26,7 +26,7 @@ public partial class Post
     public int PostId { get; set; }
 
     [InverseProperty("Post")]
-    public virtual Favorite? Favorite { get; set; }
+    public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 
     [ForeignKey("UserId")]
     [InverseProperty("Posts")]
