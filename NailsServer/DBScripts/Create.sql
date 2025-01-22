@@ -104,7 +104,7 @@ Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,
 --UPDATE Users
 --SET ProfilePic = null
 --WHERE Email = 'noa@gmail.com';
-Select * From Users
+Select * From Treatments
 Go
 --Delete From Post Where PostID=9
 --UPDATE Post
@@ -113,5 +113,6 @@ Go
 Insert into Post (UserID, PostText,PostTime,Pic) VALUES ('1','Love ','2018-03-22 00:00:00','/postsImages/1.jpg')
 
 Insert into Comment (PostID, CommentTime, CommentText, UserID) Values ('1','2018-03-22 00:00:00','Noa is amazing','1')
+Insert into Treatments (UserID, TreatmentText, Price, Duration) Values ('1','gel', 120, 45)
 
 --scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=NailsDB;User ID=NailsLogin;Password=12345;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context NailsDbContext -DataAnnotations –force

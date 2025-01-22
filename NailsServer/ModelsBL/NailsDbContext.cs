@@ -104,5 +104,19 @@ public partial class NailsDbContext : DbContext
     {
         return this.Posts.ToList();
     }
+    public List<Treatment> GetTreatments(string email)
+    {
+        User? u = GetUser(email);
+        if (u != null)
+        {
+            return this.Treatments.Where(p => p.UserId == u.UserId).ToList();
+        }
+        else
+        {
+            return new List<Treatment>();
+        }
+
+
+    }
 }
 

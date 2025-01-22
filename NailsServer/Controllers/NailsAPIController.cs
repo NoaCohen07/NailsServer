@@ -854,6 +854,38 @@ namespace NailsServer.Controllers
 
         }
 
+        [HttpGet("GetTreatments")]
+        public IActionResult GetTreatments([FromQuery] string email)
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read posts of the user
+
+                List<Models.Treatment> list = context.GetTreatments(email);
+
+                List<DTO.Treatment> treats = new List<DTO.Treatment>();
+
+                foreach (Models.Treatment p in list)
+                {
+                    DTO.Treatment treat = new DTO.Treatment(p);
+                    treats.Add(treat);
+                }
+                return Ok(treats);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
     }
 }
 
