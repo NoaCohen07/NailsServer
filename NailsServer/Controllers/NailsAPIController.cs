@@ -429,7 +429,7 @@ namespace NailsServer.Controllers
 
                 //Read posts of the user
 
-                Models.User u = context.GetUser(userId);
+                Models.User u = context.GetUser1(userId);
                 DTO.User user= new DTO.User(u);
                 return Ok(user);
             }
@@ -518,14 +518,7 @@ namespace NailsServer.Controllers
                 foreach (Models.User u in list)
                 {
                     DTO.User user = new DTO.User(u);
-                    //if (user.ProfilePic == null)
-                    //{
-                    //    user.ProfilePic = $"/profileImages/default.jpg";
-                    //}
-                    //else
-                    //{
-                    //    user.ProfilePic = $"/profileImages/{user.UserId}{user.ProfilePic}";
-                    //}
+                   
                    
                     manicurists.Add(user);
                 }
@@ -665,6 +658,202 @@ namespace NailsServer.Controllers
             }
 
         }
+
+        [HttpPost("Block")]
+        public IActionResult Block([FromBody] DTO.User u)
+        {
+            try
+            {
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Create model user class
+                Models.User user = context.GetUser1(u.UserId);
+                user.IsBlocked = u.IsBlocked;
+                context.Entry(user).State = EntityState.Modified;
+
+                context.SaveChanges();
+                //DTO.U
+                //Task was updated!
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpPost("Like")]
+        public IActionResult Like([FromBody] DTO.Like u)
+        {
+            try
+            {
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Create model user class
+                //Models.User user = context.GetUser1(u.UserId);
+
+
+                Models.Like l = u.GetModel();
+                context.Likes.Add(l);
+                context.SaveChanges();
+                //DTO.Like newFavorite = new DTO.Like(l);
+               
+
+                //Task was updated!
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpPost("RemoveLike")]
+        public IActionResult RemoveLike([FromBody] DTO.Like u)
+        {
+            try
+            {
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Create model user class
+
+                Models.Like l = u.GetModel();
+                context.Likes.Remove(l);
+                context.SaveChanges();
+               // DTO.Like newFavorite = new DTO.Like(l);
+
+                //Task was updated!
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpPost("RemoveFavorite")]
+        public IActionResult RemoveFavorite([FromBody] DTO.Favorite fav)
+        {
+            try
+            {
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Create model user class
+
+                Models.Favorite f = fav.GetModel();
+                context.Favorites.Remove(f);
+                context.SaveChanges();
+                // DTO.Like newFavorite = new DTO.Like(l);
+
+                //Task was updated!
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpGet("GetLike")]
+        public IActionResult GetLike([FromQuery] int userId, [FromQuery] int postId)
+        {
+            try
+            {
+                //Check who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read posts of the user
+
+                bool u = context.GetLiked(userId,postId);
+                //DTO.User user = new DTO.User(u);
+                return Ok(u);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        [HttpGet("GetFavorite")]
+        public IActionResult GetFavorite([FromQuery] int userId, [FromQuery] int postId)
+        {
+            try
+            {
+                //Check who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read posts of the user
+
+                bool u = context.GetFavorite(userId, postId);
+                //DTO.User user = new DTO.User(u);
+                return Ok(u);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        [HttpPost("AddTreatment")]
+        public IActionResult AddTreatment([FromBody] DTO.Treatment u)
+        {
+            try
+            {
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Create model user class
+                //Models.User user = context.GetUser1(u.UserId);
+
+
+                Models.Treatment t = u.GetModel();
+                context.Treatments.Add(t);
+                context.SaveChanges();
+                DTO.Treatment newTreatment = new DTO.Treatment(t);
+
+
+                //Task was updated!
+                return Ok(newTreatment);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
     }
 }
 

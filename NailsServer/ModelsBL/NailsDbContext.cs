@@ -12,7 +12,7 @@ public partial class NailsDbContext : DbContext
                             .FirstOrDefault();
     }
 
-    public User? GetUser(int id)
+    public Models.User? GetUser1(int id)
     {
         return this.Users.Where(u => u.UserId == id)
                             .FirstOrDefault();
@@ -21,6 +21,12 @@ public partial class NailsDbContext : DbContext
     public Post? GetPost(int id)
     {
         return this.Posts.Where(p => p.PostId == id)
+                            .FirstOrDefault();
+    }
+
+    public Like? GetLike(int userId, int postId)
+    {
+        return this.Likes.Where(p => p.PostId == postId && p.UserId==userId)
                             .FirstOrDefault();
     }
     public List<Post> GetPosts(string email)
@@ -56,6 +62,32 @@ public partial class NailsDbContext : DbContext
     {
         return this.Likes.Where(c => c.PostId == postId).Count();
 
+    }
+    public bool GetFavorite(int userid, int postId)
+    {
+        Favorite? fav= this.Favorites.Where(p => p.PostId == postId && p.UserId == userid)
+                            .FirstOrDefault();
+        if (fav == null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public bool GetLiked(int userid, int postId)
+    {
+        Like? like = this.Likes.Where(p => p.PostId == postId && p.UserId == userid)
+                            .FirstOrDefault();
+        if (like == null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public List<User> GetManicurists()

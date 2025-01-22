@@ -99,17 +99,17 @@ GO
 Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('Noa','Cohen','20-mar-2007','noa@gmail.com','0504445751','47 Sunset Lane','F','N12345','0','0','1','/profileImages/1.jpg')
 Go
 
-Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('amit','batzir','20-mar-2007','amit@gmail.com','0504445751','47 Sunset Lane','F','N12345','1','0','1','/profileImages/3.jpg')
+Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('ori','geva','20-mar-2007','ori@gmail.com','0504445751','47 Sunset Lane','F','N12345','1','0','1','/profileImages/default.jpg')
 --Delete From Users Where Email='noa@gmail.com'
 --UPDATE Users
 --SET ProfilePic = null
 --WHERE Email = 'noa@gmail.com';
-Select * From Post
+Select * From Users
 Go
-Delete From Post Where PostID=9
-UPDATE Post
-SET Pic='/postsImages/1.jpg'
-WHERE PostID = 1;
+--Delete From Post Where PostID=9
+--UPDATE Post
+--SET Pic='/postsImages/1.jpg'
+--WHERE PostID = 1;
 Insert into Post (UserID, PostText,PostTime,Pic) VALUES ('1','Love ','2018-03-22 00:00:00','/postsImages/1.jpg')
 
 Insert into Comment (PostID, CommentTime, CommentText, UserID) Values ('1','2018-03-22 00:00:00','Noa is amazing','1')
