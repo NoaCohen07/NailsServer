@@ -886,6 +886,34 @@ namespace NailsServer.Controllers
 
         }
 
+        [HttpPost("DeleteTreatment")]
+        public IActionResult DeleteTreatment([FromBody] DTO.Treatment t)
+        {
+            try
+            {
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Create model user class
+
+                Models.Treatment l = t.GetModel();
+                context.Treatments.Remove(l);
+                context.SaveChanges();
+                
+
+                //Task was updated!
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
     }
 }
 
