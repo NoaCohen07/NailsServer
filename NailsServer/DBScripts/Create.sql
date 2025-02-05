@@ -104,7 +104,7 @@ Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,
 --UPDATE Users
 --SET ProfilePic = null
 --WHERE Email = 'noa@gmail.com';
-Select * From Treatments
+Select * From Post
 Go
 --Delete From Post Where PostID=9
 --UPDATE Post
