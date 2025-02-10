@@ -39,9 +39,7 @@ public partial class NailsDbContext : DbContext
         else
         {
             return new List<Post>();
-        }
-        
-                            
+        }                  
     }
     public List<Post> GetFavorites(string email)
     {
@@ -103,6 +101,11 @@ public partial class NailsDbContext : DbContext
     public List<Post> GetAllPosts()
     {
         return this.Posts.ToList();
+    }
+
+    public List<string> GetAllEmails()
+    {
+        return this.Users.Select(u => u.Email).ToList();
     }
     public List<Treatment> GetTreatments(string email)
     {

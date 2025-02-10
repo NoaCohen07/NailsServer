@@ -914,6 +914,39 @@ namespace NailsServer.Controllers
 
         }
 
+        [HttpGet("GetAllEmails")]
+        public IActionResult GetAllEmails()
+        {
+            try
+            {
+                //Check if who is logged in
+                //string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                //if (string.IsNullOrEmpty(userEmail))
+                //{
+                //    return Unauthorized("User is not logged in");
+                //}
+
+                //Read all emails
+
+                List<string> list = context.GetAllEmails();
+
+                List<string> allEmails = new List<string>();
+
+                foreach (string p in list)
+                {
+                    string post = new string(p);
+                    
+                    allEmails.Add(post);
+                }
+                return Ok(allEmails);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
     }
 }
 
