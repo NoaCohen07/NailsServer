@@ -440,6 +440,31 @@ namespace NailsServer.Controllers
 
         }
 
+        [HttpGet("GetUserByEmail")]
+        public IActionResult GetUserByEmail([FromQuery] string email)
+        {
+            try
+            {
+                //Check who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                //Read posts of the user
+
+                Models.User u = context.GetUserEmail(email);
+                DTO.User user = new DTO.User(u);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
         [HttpPost("AddComment")]
         public IActionResult AddComment([FromBody] DTO.Comment c)
         {
