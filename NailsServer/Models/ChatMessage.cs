@@ -24,6 +24,8 @@ public partial class ChatMessage
     [Column(TypeName = "datetime")]
     public DateTime MessageTime { get; set; }
 
+    public bool Seen { get; set; }
+
     [StringLength(5)]
     public string? Pic { get; set; }
 

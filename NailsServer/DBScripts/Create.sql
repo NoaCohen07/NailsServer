@@ -37,6 +37,7 @@ ReceiverID int Foreign Key References Users(UserID),
 MessageID int Primary Key Identity(1,1) NOT NULL,
 MessageText nvarchar(4000),
 MessageTime Datetime NOT NULL,
+Seen bit default(0) Not Null,
 Pic nvarchar (5),
 Video nvarchar (5)
 )

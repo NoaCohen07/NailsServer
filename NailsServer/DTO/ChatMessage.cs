@@ -6,10 +6,10 @@ namespace NailsServer.DTO;
 public class ChatMessage
 {
    
-    public int? SenderId { get; set; }
+    public int SenderId { get; set; }
 
    
-    public int? ReceiverId { get; set; }
+    public int ReceiverId { get; set; }
 
     
     public int MessageId { get; set; }
@@ -20,6 +20,7 @@ public class ChatMessage
     
     public DateTime MessageTime { get; set; }
 
+    public bool Seen { get; set; }
 
     public string? Pic { get; set; }
 
@@ -33,13 +34,14 @@ public class ChatMessage
     public ChatMessage() { }
     public ChatMessage(Models.ChatMessage message)
     {
-        this.SenderId = message.SenderId;
-        this.ReceiverId = message.ReceiverId;
+        this.SenderId = message.SenderId.Value;
+        this.ReceiverId = message.ReceiverId.Value;
         this.MessageId = message.MessageId;
         this.MessageText = message.MessageText;
         this.MessageTime = message.MessageTime;
         this.Pic = message.Pic;
         this.Video = message.Video;
+        this.Seen= message.Seen;
     }
     public Models.ChatMessage GetModel()
     {
@@ -51,6 +53,7 @@ public class ChatMessage
         message.MessageTime = this.MessageTime;
         message.Pic = this.Pic;
         message.Video = this.Video;
+        message.Seen=this.Seen;
         return message;
     }
 }

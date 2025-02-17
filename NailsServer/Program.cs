@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using NailsServer.Hubs;
 using NailsServer.Models;
 
 namespace NailsServer
@@ -61,7 +62,7 @@ namespace NailsServer
             app.UseHttpsRedirection();
             app.UseStaticFiles(); //Support static files delivery from wwwroot folder
             app.MapControllers(); //Map all controllers classes
-
+            app.MapHub<ChatHub>("/chat"); //Map the chatHub to the /chatHub URL
             // Configure the application to listen on all network interfaces
             // Also note the changes in launchSettings.json
             // And you should press "allow" when windows firewall prompte a message after running the server for the first time!

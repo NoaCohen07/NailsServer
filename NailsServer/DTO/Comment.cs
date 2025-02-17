@@ -30,6 +30,7 @@ namespace NailsServer.DTO
             this.CommentText = c.CommentText;
             this.UserId = c.UserId;
             this.CommentId = c.CommentId;
+            
         }
         public Models.Comment GetModel()
         {
