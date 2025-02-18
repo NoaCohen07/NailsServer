@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using NailsServer.DTO;
 using NailsServer.Models;
+ 
 
 namespace NailsServer.Hubs
 {
@@ -16,10 +17,10 @@ namespace NailsServer.Hubs
         }
 
 
-        public async Task SendMessage(string userId, string message)
+        public async Task SendMessage( DTO.ChatMessage message)
         {
             //Find all connections for the user id who need to recieve the message
-            List<KeyValuePair<string, string>>? connections = connectedUsers.Where(x => x.Value == userId).ToList();
+            List<KeyValuePair<string, string>>? connections = connectedUsers.Where(x => x.Value == message.SenderId.ToString()).ToList();
             //Find the user ID of the sender based on its connection id
             string? sender = connectedUsers[Context.ConnectionId];
             //If all is good, loop through the connections and send them all the message

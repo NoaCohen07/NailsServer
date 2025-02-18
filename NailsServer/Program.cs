@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NailsServer.Hubs;
 using NailsServer.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace NailsServer
 {
@@ -14,6 +15,7 @@ namespace NailsServer
             // Add services to the container.
 
             builder.Services.AddControllers();
+            builder.Services.AddSignalR();
 
             #region Add Database context to Dependency Injection
             //Read connection string from app settings.json

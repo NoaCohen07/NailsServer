@@ -1,8 +1,10 @@
-﻿namespace NailsServer.DTO
+﻿using System.Collections.ObjectModel;
+
+namespace NailsServer.DTO
 {
     public class UserChatMessages
     {
-        public List<ChatMessage> Messages { get; set; }
+        public ObservableCollection<ChatMessage> Messages { get; set; }
         public virtual User User { get; set; }
     }
 }
