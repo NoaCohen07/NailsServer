@@ -105,8 +105,9 @@ Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,
 --UPDATE Users
 --SET ProfilePic = null
 --WHERE Email = 'noa@gmail.com';
-Select * From Post
+Select * From ChatMessages
 Go
+Insert Into ChatMessages (SenderID ,ReceiverID ,MessageText ,MessageTime,Seen) Values ('1','2','hi','2018-03-22 00:00:00','0')
 --Delete From Post Where PostID=9
 --UPDATE Post
 --SET Pic='/postsImages/1.jpg'

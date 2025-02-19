@@ -23,12 +23,17 @@ namespace NailsServer.Hubs
             List<KeyValuePair<string, string>>? connections = connectedUsers.Where(x => x.Value == message.SenderId.ToString()).ToList();
             //Find the user ID of the sender based on its connection id
             string? sender = connectedUsers[Context.ConnectionId];
+            Models.ChatMessage m = message.GetModel();
+            dbContext.ChatMessages.Add(m);
+            dbContext.SaveChanges();
+            //DTO.Treatment newTreatment = new DTO.Treatment(t);
+
             //If all is good, loop through the connections and send them all the message
             if (connections != null && sender != null)
             {
                 foreach (KeyValuePair<string, string> connection in connections)
                 {
-                    await Clients.Client(connection.Key).SendAsync("ReceiveMessage", sender, message);
+                    await Clients.Client(connection.Key).SendAsync("ReceiveMessage", message);
                 }
             }
         }
@@ -52,11 +57,11 @@ namespace NailsServer.Hubs
                     int userid;
                     if(message.ReceiverId.ToString() == userId)
                     {
-                         userid = message1.ReceiverId;
+                         userid = message1.SenderId;
                     }
                     else
                     {
-                        userid = message1.SenderId;
+                        userid = message1.ReceiverId;
                     }
                     userChatMessages = new DTO.UserChatMessages();
                     Models.User u= dbContext.GetUser1(userid);
