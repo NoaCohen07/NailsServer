@@ -64,7 +64,7 @@ namespace NailsServer.Hubs
                         userid = message1.ReceiverId;
                     }
                     userChatMessages = new DTO.UserChatMessages();
-                    Models.User u= dbContext.GetUser1(userid);
+                    Models.User u= dbContext.GetUserById(userid);
                     DTO.User user= new DTO.User(u);
                     userChatMessages.User = user;
                     userMessages.Add(userChatMessages);

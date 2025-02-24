@@ -39,7 +39,7 @@ namespace NailsServer
             });
             #endregion
 
-            #region for debugginh UI
+            #region for debugging UI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -47,7 +47,7 @@ namespace NailsServer
 
             var app = builder.Build();
 
-            #region for debugginh UI
+            #region for debugging UI
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

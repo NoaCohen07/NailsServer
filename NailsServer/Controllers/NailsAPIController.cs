@@ -35,6 +35,7 @@ namespace NailsServer.Controllers
             return Ok("Server Responded Successfully");
         }
 
+        
         [HttpPost("login")]
         public IActionResult Login([FromBody] DTO.LoginInfo loginDto)
         {
@@ -55,9 +56,8 @@ namespace NailsServer.Controllers
                 HttpContext.Session.SetString("loggedInUser", modelsUser.Email);
 
                 DTO.User dtoUser = new DTO.User(modelsUser);
-                //profile img
-                //dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser.UserId);
-                //dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser);
+                
+                //returns a dto user of the user that logged in
                 return Ok(dtoUser);
             }
             catch (Exception ex)
@@ -82,8 +82,7 @@ namespace NailsServer.Controllers
 
                 //User was added!
                 DTO.User dtoUser = new DTO.User(modelsUser);
-                //profile pic
-                //dtoUser.ProfilePic = GetProfileImageVirtualPath(dtoUser);
+               
                 return Ok(dtoUser);
             }
             catch (Exception ex)
@@ -195,23 +194,6 @@ namespace NailsServer.Controllers
             return false;
         }
 
-        ////this function check which profile image exist and return the virtual path of it.
-        ////if it does not exist it returns the default profile image virtual path
-        //private string GetProfileImageVirtualPath(DTO.User dtoUser)
-        //{
-  
-        //    string virtualPath = $"/profileImages/{dtoUser.UserId}";
-        //    if (dtoUser.ProfilePic == null)
-        //    {
-        //        virtualPath = $"/profileImages/default.jpg";
-        //    }
-        //    else
-        //        virtualPath += dtoUser.ProfilePic;
-
-
-        //    return virtualPath;
-        //}
-
         [HttpPost("updateuser")]
         public IActionResult UpdateUser([FromBody] DTO.User userDto)
         {
@@ -230,7 +212,6 @@ namespace NailsServer.Controllers
                 context.ChangeTracker.Clear();
 
                 //Check if the user that is logged in is the same user of the task
-                //this situation is ok only if the user is a manager
                 if (theUser == null || (userDto.UserId != theUser.UserId))
                 {
                     return Unauthorized("Failed to update user");
@@ -318,8 +299,8 @@ namespace NailsServer.Controllers
             context.Entry(post).State = EntityState.Modified;
             context.SaveChanges();
             DTO.Post p = new DTO.Post(post);
-            // post.PostPicturePath = GetImageVirtualPath(dtoUser);
-
+            
+            //returns the post that has just been updated with a picture
             return Ok(p);
         }
 
@@ -337,7 +318,6 @@ namespace NailsServer.Controllers
                 }
 
                 //Read posts of the user
-
                 List<Models.Post> list = context.GetPosts(email);
 
                 List<DTO.Post> posts = new List<DTO.Post>();
@@ -346,9 +326,10 @@ namespace NailsServer.Controllers
                 {
                     DTO.Post post = new DTO.Post(p);
                     
-                    //post.Pic = $"/postsImages/{post.PostId}{p.Pic}";
                     posts.Add(post);
                 }
+
+                //returns all of the posts the user has posted
                 return Ok(posts);
             }
             catch (Exception ex)
@@ -370,7 +351,7 @@ namespace NailsServer.Controllers
                     return Unauthorized("User is not logged in");
                 }
 
-                //Read posts of the user
+                //Read comments of the post
 
                 List<Models.Comment> list = context.GetComments(postId);
 
@@ -379,9 +360,11 @@ namespace NailsServer.Controllers
                 foreach (Models.Comment c in list)
                 {
                     DTO.Comment comment = new DTO.Comment(c);
-                    //post.PostPicturePath = $"/postsImages/{post.PostId}{p.Pic}";
+                    
                     comments.Add(comment);
                 }
+
+                //returns list of comments that have been posted on a post
                 return Ok(comments);
             }
             catch (Exception ex)
@@ -403,8 +386,7 @@ namespace NailsServer.Controllers
                     return Unauthorized("User is not logged in");
                 }
 
-                //Read posts of the user
-
+                //Read likes of the post
                 int likes = context.GetNumLikes(postId);
                 return Ok(likes);
             }
@@ -427,9 +409,8 @@ namespace NailsServer.Controllers
                     return Unauthorized("User is not logged in");
                 }
 
-                //Read posts of the user
-
-                Models.User u = context.GetUser1(userId);
+                //returns user by user id
+                Models.User u = context.GetUserById(userId);
                 DTO.User user= new DTO.User(u);
                 return Ok(user);
             }
@@ -445,16 +426,10 @@ namespace NailsServer.Controllers
         {
             try
             {
-                //Check who is logged in
-                //string? userEmail = HttpContext.Session.GetString("loggedInUser");
-                //if (string.IsNullOrEmpty(userEmail))
-                //{
-                //    return Unauthorized("User is not logged in");
-                //}
 
-                //Read posts of the user
+                //Read user by email
 
-                Models.User u = context.GetUserEmail(email);
+                Models.User u = context.GetUser(email);
                 DTO.User user = new DTO.User(u);
                 return Ok(user);
             }
@@ -470,6 +445,7 @@ namespace NailsServer.Controllers
         {
             try
             {
+                //Check who is logged in
                 string? userEmail = HttpContext.Session.GetString("loggedInUser");
                 if (string.IsNullOrEmpty(userEmail))
                 {
@@ -498,6 +474,7 @@ namespace NailsServer.Controllers
         {
             try
             {
+                //Check who is logged in
                 string? userEmail = HttpContext.Session.GetString("loggedInUser");
                 if (string.IsNullOrEmpty(userEmail))
                 {
@@ -506,8 +483,7 @@ namespace NailsServer.Controllers
 
                 //Create model user class
                 Models.Post post = p.GetModel();
-                //post.ProfilePic = $"\\profileImages\\{user.UserId}{extention}";
-                //p.PostPicturePath=$"/postsImages/{p.PostId}{p.Pic}";
+                
                 context.Posts.Add(post);
                 context.SaveChanges();
                 DTO.Post newPost = new DTO.Post(post);
@@ -613,6 +589,8 @@ namespace NailsServer.Controllers
 
                     allPosts.Add(post);
                 }
+
+                //returns all of the posts that have been posted
                 return Ok(allPosts);
             }
             catch (Exception ex)
@@ -634,7 +612,7 @@ namespace NailsServer.Controllers
                     return Unauthorized("User is not logged in");
                 }
 
-                //Read all posts
+                //Read posts that the user who is logged in has favorited
 
                 List<Models.Post> list = context.GetFavorites(userEmail);
               
@@ -661,19 +639,20 @@ namespace NailsServer.Controllers
         {
             try
             {
+                //Check who is logged in
                 string? userEmail = HttpContext.Session.GetString("loggedInUser");
                 if (string.IsNullOrEmpty(userEmail))
                 {
                     return Unauthorized("User is not logged in");
                 }
 
-                //Create model user class
+                //Create model favorite class
                 Models.Favorite fav = f.GetModel();
 
                 context.Favorites.Add(fav);
                 context.SaveChanges();
                 DTO.Favorite newFavorite = new DTO.Favorite(fav);
-                //Post was added!
+                //Favorite was added!
 
                 return Ok(newFavorite);
             }
@@ -689,6 +668,7 @@ namespace NailsServer.Controllers
         {
             try
             {
+                //Check who is logged in
                 string? userEmail = HttpContext.Session.GetString("loggedInUser");
                 if (string.IsNullOrEmpty(userEmail))
                 {
@@ -696,13 +676,12 @@ namespace NailsServer.Controllers
                 }
 
                 //Create model user class
-                Models.User user = context.GetUser1(u.UserId);
+                Models.User user = context.GetUserById(u.UserId);
+                //block the user
                 user.IsBlocked = u.IsBlocked;
                 context.Entry(user).State = EntityState.Modified;
-
                 context.SaveChanges();
-                //DTO.U
-                //Task was updated!
+               
                 return Ok();
             }
             catch (Exception ex)
@@ -717,6 +696,7 @@ namespace NailsServer.Controllers
         {
             try
             {
+                //Check who is logged in
                 string? userEmail = HttpContext.Session.GetString("loggedInUser");
                 if (string.IsNullOrEmpty(userEmail))
                 {
@@ -748,6 +728,7 @@ namespace NailsServer.Controllers
         {
             try
             {
+                //Check who is logged in
                 string? userEmail = HttpContext.Session.GetString("loggedInUser");
                 if (string.IsNullOrEmpty(userEmail))
                 {
@@ -776,18 +757,17 @@ namespace NailsServer.Controllers
         {
             try
             {
+                //Check who is logged in
                 string? userEmail = HttpContext.Session.GetString("loggedInUser");
                 if (string.IsNullOrEmpty(userEmail))
                 {
                     return Unauthorized("User is not logged in");
                 }
 
-                //Create model user class
-
+                //Create model favorite class
                 Models.Favorite f = fav.GetModel();
                 context.Favorites.Remove(f);
                 context.SaveChanges();
-                // DTO.Like newFavorite = new DTO.Like(l);
 
                 //Task was updated!
                 return Ok();
@@ -811,10 +791,9 @@ namespace NailsServer.Controllers
                     return Unauthorized("User is not logged in");
                 }
 
-                //Read posts of the user
-
+                //Read like of the user of the post
                 bool u = context.GetLiked(userId,postId);
-                //DTO.User user = new DTO.User(u);
+                
                 return Ok(u);
             }
             catch (Exception ex)
@@ -835,8 +814,7 @@ namespace NailsServer.Controllers
                     return Unauthorized("User is not logged in");
                 }
 
-                //Read posts of the user
-
+                //Read favorite of the user of the post
                 bool u = context.GetFavorite(userId, postId);
                 //DTO.User user = new DTO.User(u);
                 return Ok(u);
@@ -853,16 +831,15 @@ namespace NailsServer.Controllers
         {
             try
             {
+                //Check who is logged in
                 string? userEmail = HttpContext.Session.GetString("loggedInUser");
                 if (string.IsNullOrEmpty(userEmail))
                 {
                     return Unauthorized("User is not logged in");
                 }
 
-                //Create model user class
-                //Models.User user = context.GetUser1(u.UserId);
-
-
+                //Create model treatment class
+               
                 Models.Treatment t = u.GetModel();
                 context.Treatments.Add(t);
                 context.SaveChanges();
@@ -891,7 +868,7 @@ namespace NailsServer.Controllers
                     return Unauthorized("User is not logged in");
                 }
 
-                //Read posts of the user
+                //Read treatments of the user
 
                 List<Models.Treatment> list = context.GetTreatments(email);
 
@@ -916,19 +893,21 @@ namespace NailsServer.Controllers
         {
             try
             {
+                //Check who is logged in
                 string? userEmail = HttpContext.Session.GetString("loggedInUser");
                 if (string.IsNullOrEmpty(userEmail))
                 {
                     return Unauthorized("User is not logged in");
                 }
 
-                //Create model user class
+                //Create model treament class
 
                 Models.Treatment l = t.GetModel();
+
+                //delete treatment
                 context.Treatments.Remove(l);
                 context.SaveChanges();
                 
-
                 //Task was updated!
                 return Ok();
             }
@@ -944,26 +923,11 @@ namespace NailsServer.Controllers
         {
             try
             {
-                //Check if who is logged in
-                //string? userEmail = HttpContext.Session.GetString("loggedInUser");
-                //if (string.IsNullOrEmpty(userEmail))
-                //{
-                //    return Unauthorized("User is not logged in");
-                //}
-
-                //Read all emails
+                //Read all emails of every user in the app
 
                 List<string> list = context.GetAllEmails();
 
-                List<string> allEmails = new List<string>();
-
-                foreach (string p in list)
-                {
-                    string post = new string(p);
-                    
-                    allEmails.Add(post);
-                }
-                return Ok(allEmails);
+                return Ok(list);
             }
             catch (Exception ex)
             {
@@ -977,20 +941,13 @@ namespace NailsServer.Controllers
         {
             try
             {
-                //Check if who is logged in
-                //string? userEmail = HttpContext.Session.GetString("loggedInUser");
-                //if (string.IsNullOrEmpty(userEmail))
-                //{
-                //    return Unauthorized("User is not logged in");
-                //}
-
                 //Get model user class from DB with matching email. 
                 Models.User? theUser = context.GetUser(userDto.Email);
                 //Clear the tracking of all objects to avoid double tracking
                 context.ChangeTracker.Clear();
 
                 //Check if the user that is logged in is the same user of the task
-                //this situation is ok only if the user is a manager
+               
                 if (theUser == null || (userDto.UserId != theUser.UserId))
                 {
                     return Unauthorized("Failed to update user");
@@ -1010,44 +967,6 @@ namespace NailsServer.Controllers
                 return BadRequest(ex.Message);
             }
 
-        }
-
-        [HttpPost("SendMessage")]
-        public IActionResult SendMessage([FromBody] string userId)
-        {
-            //connectedUsers.Add(Context.ConnectionId, userId);
-            //await base.OnConnectedAsync();
-
-            List<Models.ChatMessage> messages = context.ChatMessages.Where(c => c.ReceiverId.ToString() == userId || c.SenderId.ToString() == userId).ToList();
-            List<DTO.UserChatMessages> userMessages = new List<DTO.UserChatMessages>();
-            foreach (Models.ChatMessage message in messages)
-            {
-
-                DTO.UserChatMessages? userChatMessages = userMessages.Where(um => um.User.UserId == message.SenderId || um.User.UserId == message.ReceiverId).FirstOrDefault();
-                DTO.ChatMessage message1 = new DTO.ChatMessage(message);
-
-
-                if (userChatMessages == null)
-                {
-                    int userid;
-                    if (message.ReceiverId.ToString() == userId)
-                    {
-                        userid = message1.ReceiverId;
-                    }
-                    else
-                    {
-                        userid = message1.SenderId;
-                    }
-                    userChatMessages = new DTO.UserChatMessages();
-                    Models.User u = context.GetUser1(userid);
-                    DTO.User user = new DTO.User(u);
-                    userChatMessages.User = user;
-                    userMessages.Add(userChatMessages);
-                }
-                userChatMessages.Messages.Add(message1);
-            }
-
-            return Ok(userMessages);
         }
 
 
