@@ -24,6 +24,8 @@ public class ChatMessage
 
     public string? Pic { get; set; }
 
+    public string MessageColor { get;set; }
+
   
     public string? Video { get; set; }
 
