@@ -26,6 +26,7 @@ public class ChatMessage
 
     public string MessageColor { get;set; }
 
+    public string Bold { get; set; }
   
     public string? Video { get; set; }
 

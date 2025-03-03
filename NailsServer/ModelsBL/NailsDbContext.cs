@@ -122,5 +122,19 @@ public partial class NailsDbContext : DbContext
 
 
     }
+
+    public void ChangeAllMessagesToSeen(int senderId, int recieverId)
+    {
+        List<ChatMessage> messages  = ChatMessages.Where(m => m.SenderId == senderId && m.ReceiverId== recieverId && !m.Seen).ToList();
+        
+        this.ChangeTracker.Clear();
+        foreach (ChatMessage m in messages)
+        {
+            m.Seen = true;
+            ChatMessages.Update(m);
+        }
+
+        this.SaveChanges();
+    }
 }
 

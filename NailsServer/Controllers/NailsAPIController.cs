@@ -969,6 +969,28 @@ namespace NailsServer.Controllers
 
         }
 
+        [HttpGet("SeenMessages")]
+        public IActionResult SeenMessages([FromQuery] int senderId, [FromQuery] int receiverId)
+        {
+            try
+            {
+                //Check if who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+
+                context.ChangeAllMessagesToSeen(senderId, receiverId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
 
     }
 }

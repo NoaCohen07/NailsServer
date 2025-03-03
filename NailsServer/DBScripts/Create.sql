@@ -97,10 +97,10 @@ GO
 ALTER ROLE db_owner ADD MEMBER [NailsUser]
 GO
 
-Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('Noa','Cohen','20-mar-2007','noa20032007@gmail.com','0504445751','47 Sunset Lane','F','N12345','0','0','1','/profileImages/1.jpg')
+Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('Noa','Cohen','20-mar-2007','noa20032007@gmail.com','0504445751','47 Sunset Lane, Tenafly','F','N12345','0','0','1','/profileImages/1.jpg')
 Go
 
-Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('ori','geva','13-mar-2007','geva.ori1@gmail.com','0504445751','Mazal Ariye','F','N12345','1','0','1','/profileImages/default.jpg')
+Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('ori','geva','13-mar-2007','geva.ori1@gmail.com','0504445751','Mazal Arieh Street, Hod Hasharon, Israel','F','N12345','1','0','1','/profileImages/default.jpg')
 
 Select * From ChatMessages
 Go
