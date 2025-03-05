@@ -20,16 +20,13 @@ namespace NailsServer.Hubs
         public async Task SendMessage( DTO.ChatMessage message)
         {
             //Find all connections for the user id who need to recieve the message
-            List<KeyValuePair<string, string>>? connections = connectedUsers.Where(x => x.Value == message.SenderId.ToString()).ToList();
-            //Find the user ID of the sender based on its connection id
-            string? sender = connectedUsers[Context.ConnectionId];
+            List<KeyValuePair<string, string>>? connections = connectedUsers.Where(x => x.Value == message.ReceiverId.ToString()).ToList();
             Models.ChatMessage m = message.GetModel();
             dbContext.ChatMessages.Add(m);
             dbContext.SaveChanges();
-            //DTO.Treatment newTreatment = new DTO.Treatment(t);
-
+            
             //If all is good, loop through the connections and send them all the message
-            if (connections != null && sender != null)
+            if (connections != null)
             {
                 foreach (KeyValuePair<string, string> connection in connections)
                 {

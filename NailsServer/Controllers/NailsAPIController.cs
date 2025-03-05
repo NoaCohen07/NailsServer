@@ -127,7 +127,7 @@ namespace NailsServer.Controllers
                 if (file.FileName.LastIndexOf(".") > 0)
                 {
                     extention = file.FileName.Substring(file.FileName.LastIndexOf(".")).ToLower();
-                    user.ProfilePic = $"\\profileImages\\{user.UserId}{extention}";
+                    user.ProfilePic = $"/profileImages/{user.UserId}{extention}";
                 }
                 if (!allowedExtentions.Where(e => e == extention).Any())
                 {
@@ -136,7 +136,7 @@ namespace NailsServer.Controllers
                 }
 
                 //Build path in the web root (better to a specific folder under the web root
-                string filePath = $"{this.webHostEnvironment.WebRootPath}\\profileImages\\{user.UserId}{extention}";
+                string filePath = $"{this.webHostEnvironment.WebRootPath}/profileImages/{user.UserId}{extention}";
 
                 using (var stream = System.IO.File.Create(filePath))
                 {

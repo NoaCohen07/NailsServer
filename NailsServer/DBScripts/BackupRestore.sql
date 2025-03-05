@@ -13,3 +13,7 @@ Go
 
 Create Database NailsDB
 Go
+
+
+select * from ChatMessages
+Update Users Set ProfilePic='/profileImages/3.jpg' Where UserId=3

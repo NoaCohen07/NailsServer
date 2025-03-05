@@ -15,7 +15,11 @@ namespace NailsServer
             // Add services to the container.
 
             builder.Services.AddControllers();
-            builder.Services.AddSignalR();
+            builder.Services.AddSignalR(options =>
+            {
+                options.KeepAliveInterval = TimeSpan.FromSeconds(10);
+                options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+            });
 
             #region Add Database context to Dependency Injection
             //Read connection string from app settings.json
