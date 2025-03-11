@@ -36,7 +36,9 @@ namespace NailsServer.Controllers
             return Ok("Server Responded Successfully");
         }
 
-        
+
+        // This method handles the login process by verifying the user's email and password. 
+        // If the login is successful, the user's email is stored in the session.
         [HttpPost("login")]
         public IActionResult Login([FromBody] DTO.LoginInfo loginDto)
         {
@@ -68,6 +70,9 @@ namespace NailsServer.Controllers
 
         }
 
+
+        // This method handles user registration by creating a new user in the database with the provided details.
+        // It assigns a default profile picture and returns the newly created user data.
         [HttpPost("register")]
         public IActionResult Register([FromBody] DTO.User userDto)
         {
@@ -93,6 +98,9 @@ namespace NailsServer.Controllers
 
         }
 
+
+        //This method allows an authenticated user to upload a profile image.
+        //The image file is validated to ensure it is either a PNG or JPG, and then updates the user's profile pic in the DB
         [HttpPost("UploadProfileImage")]
         public async Task<IActionResult> UploadProfileImageAsync(IFormFile file)
         {
@@ -195,6 +203,8 @@ namespace NailsServer.Controllers
             return false;
         }
 
+        //This method allows the logged-in user to update their profile information, such as name and email.
+        //It ensures that the user making the request is the same as the logged-in user.
         [HttpPost("updateuser")]
         public IActionResult UpdateUser([FromBody] DTO.User userDto)
         {
@@ -234,6 +244,8 @@ namespace NailsServer.Controllers
 
         }
 
+        // This method allows a user to upload an image associated with a post.
+        // It ensures the user is logged in, and then the image is validated and saved.
         [HttpPost("UploadPostImage")]
         public async Task<IActionResult> UploadPostImageAsync(IFormFile file, [FromQuery] int postId)
         {
@@ -250,6 +262,7 @@ namespace NailsServer.Controllers
             Models.Post? post = context.GetPost(postId);
             //Clear the tracking of all objects to avoid double tracking
             context.ChangeTracker.Clear();
+
 
             if (post == null)
             {
@@ -305,7 +318,8 @@ namespace NailsServer.Controllers
             return Ok(p);
         }
 
-
+        // This method retrieves all the posts made by a user identified by the given email.
+        // It returns a list of posts that the user has created.
         [HttpGet("GetPosts")]
         public IActionResult GetPosts([FromQuery] string email)
         {
@@ -340,6 +354,8 @@ namespace NailsServer.Controllers
 
         }
 
+        // This method retrieves all comments for a given post identified by the postId.
+        // It returns a list of comments associated with the specified post.
         [HttpGet("GetPostComments")]
         public IActionResult GetPostComments([FromQuery] int postId)
         {
@@ -375,6 +391,8 @@ namespace NailsServer.Controllers
 
         }
 
+        // This method retrieves the number of likes for a given post identified by the postId.
+        // It returns the total number of likes for that post.
         [HttpGet("GetLikes")]
         public IActionResult GetLikes([FromQuery] int postId)
         {
@@ -398,6 +416,7 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method retrieves a user by their userId and returns the user's data in a DTO format.
         [HttpGet("GetUser")]
         public IActionResult GetUser([FromQuery] int userId)
         {
@@ -422,14 +441,13 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method retrieves a user by their email and returns the user's data in a DTO format
         [HttpGet("GetUserByEmail")]
         public IActionResult GetUserByEmail([FromQuery] string email)
         {
             try
             {
-
                 //Read user by email
-
                 Models.User u = context.GetUser(email);
                 DTO.User user = new DTO.User(u);
                 return Ok(user);
@@ -441,6 +459,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method allows a logged-in user to add a comment to a post.
+        //It takes a Comment and saves it to the DB.
         [HttpPost("AddComment")]
         public IActionResult AddComment([FromBody] DTO.Comment c)
         {
@@ -470,6 +490,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method allows a logged-in user to create a new post.
+        //It takes a post and saves it to the database.
         [HttpPost("AddPost")]
         public IActionResult AddPost([FromBody] DTO.Post p)
         {
@@ -499,6 +521,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method retrieves all manicurists from the database and returns as a list of User DTOs.
+        //A manicurist is identified as a user
         [HttpGet("GetManicurists")]
         public IActionResult GetManicurists()
         {
@@ -533,6 +557,8 @@ namespace NailsServer.Controllers
 
         }
 
+
+        //This method retrieves all users from the database and returns a list of User DTOs.
         [HttpGet("GetUsers")]
         public IActionResult GetUsers()
         {
@@ -551,6 +577,7 @@ namespace NailsServer.Controllers
 
                 List<DTO.User> users = new List<DTO.User>();
 
+                // Convert each user model to a DTO and add to the list
                 foreach (Models.User u in list)
                 {
                     DTO.User user = new DTO.User(u);
@@ -566,6 +593,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method retrieves all posts from the database and returns them as a list of Post DTOs.
+        //It returns all posts in the app, regardless of the user who created them.
         [HttpGet("GetAllPosts")]
         public IActionResult GetAllPosts()
         {
@@ -584,6 +613,7 @@ namespace NailsServer.Controllers
 
                 List<DTO.Post> allPosts = new List<DTO.Post>();
 
+                //Convert each post model to a DTO and add to the list 
                 foreach (Models.Post p in list)
                 {
                     DTO.Post post = new DTO.Post(p);
@@ -601,6 +631,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method retrieves all the posts that the logged-in user has marked as favorites.
+        //It returns a list of favorite posts as Post DTOs.
         [HttpGet("GetFavorites")]
         public IActionResult GetFavorites()
         {
@@ -613,17 +645,15 @@ namespace NailsServer.Controllers
                     return Unauthorized("User is not logged in");
                 }
 
-                //Read posts that the user who is logged in has favorited
+                //Read posts that the user who is logged in has marked as favorites
 
                 List<Models.Post> list = context.GetFavorites(userEmail);
-              
-
                 List<DTO.Post> allPosts = new List<DTO.Post>();
 
+                //Convert each post model to a DTO and add to the list
                 foreach (Models.Post p in list)
                 {
                     DTO.Post post = new DTO.Post(p);
-
                     allPosts.Add(post);
                 }
                 return Ok(allPosts);
@@ -635,6 +665,8 @@ namespace NailsServer.Controllers
 
         }
 
+        // This method allows a logged-in user to add a post to their favorites list.
+        // It takes a Favorite DTO as input, converts it to a model, and saves it in the database.
         [HttpPost("AddFavorite")]
         public IActionResult AddFavorite([FromBody] DTO.Favorite f)
         {
@@ -664,6 +696,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method allows an admin to block and unblock another user.
+        //It takes a User DTO as input, updates the user’s block status, and saves it in the database.
         [HttpPost("Block")]
         public IActionResult Block([FromBody] DTO.User u)
         {
@@ -692,6 +726,8 @@ namespace NailsServer.Controllers
 
         }
 
+        // This method allows a logged-in user to like a post.
+        // It takes a Like DTO as input, converts it to a model, and saves it in the database.
         [HttpPost("Like")]
         public IActionResult Like([FromBody] DTO.Like u)
         {
@@ -724,6 +760,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method allows a logged-in user to remove a like from a post.
+        //It takes a Like DTO as input, converts it to a model, and removes it from the database.
         [HttpPost("RemoveLike")]
         public IActionResult RemoveLike([FromBody] DTO.Like u)
         {
@@ -753,6 +791,8 @@ namespace NailsServer.Controllers
 
         }
 
+        // This method allows a logged-in user to remove a post from their favorites list.
+        // It takes a Favorite DTO as input, converts it to a model, and removes it from the database.
         [HttpPost("RemoveFavorite")]
         public IActionResult RemoveFavorite([FromBody] DTO.Favorite fav)
         {
@@ -780,6 +820,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method checks if a user has liked a specific post.
+        //It takes the userId and postId as query parameters and returns a boolean indicating if the user liked the post or not.
         [HttpGet("GetLike")]
         public IActionResult GetLike([FromQuery] int userId, [FromQuery] int postId)
         {
@@ -803,6 +845,9 @@ namespace NailsServer.Controllers
             }
 
         }
+
+        // This method checks if a user has favorited a specific post.
+        // It takes the userId and postId as query parameters and returns a boolean indicating if the user has favorited the post or not.
         [HttpGet("GetFavorite")]
         public IActionResult GetFavorite([FromQuery] int userId, [FromQuery] int postId)
         {
@@ -827,6 +872,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method allows a logged-in user to add a treatment record to the database.
+        //It takes a Treatment DTO as input, converts it to a model, and saves it in the database.
         [HttpPost("AddTreatment")]
         public IActionResult AddTreatment([FromBody] DTO.Treatment u)
         {
@@ -857,6 +904,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method retrieves all the treatments for a specific user based on their email.
+        //It takes the manicurists's email as a query parameter and returns a list of treatment DTOs.
         [HttpGet("GetTreatments")]
         public IActionResult GetTreatments([FromQuery] string email)
         {
@@ -870,11 +919,10 @@ namespace NailsServer.Controllers
                 }
 
                 //Read treatments of the user
-
                 List<Models.Treatment> list = context.GetTreatments(email);
-
                 List<DTO.Treatment> treats = new List<DTO.Treatment>();
 
+                // Convert each treatment model to a DTO
                 foreach (Models.Treatment p in list)
                 {
                     DTO.Treatment treat = new DTO.Treatment(p);
@@ -889,6 +937,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method allows a logged-in user to delete a treatment record from the database.
+        //It takes a Treatment DTO as input, converts it to a model, and removes it from the database.
         [HttpPost("DeleteTreatment")]
         public IActionResult DeleteTreatment([FromBody] DTO.Treatment t)
         {
@@ -919,6 +969,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method retrieves a list of all email addresses of every user in the application.
+        //It returns a list of strings containing the email addresses of all users.
         [HttpGet("GetAllEmails")]
         public IActionResult GetAllEmails()
         {
@@ -937,6 +989,7 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method allows a user to update their password if they forgot it.
         [HttpPost("UpdateUserPassword")]
         public IActionResult UpdateUserPassword([FromBody] DTO.User userDto)
         {
@@ -947,8 +1000,7 @@ namespace NailsServer.Controllers
                 //Clear the tracking of all objects to avoid double tracking
                 context.ChangeTracker.Clear();
 
-                //Check if the user that is logged in is the same user of the task
-               
+                //Check if the user is the same user of the task
                 if (theUser == null || (userDto.UserId != theUser.UserId))
                 {
                     return Unauthorized("Failed to update user");
@@ -970,6 +1022,8 @@ namespace NailsServer.Controllers
 
         }
 
+        //This method marks all messages between a specific sender and receiver as "seen".
+        //It takes senderId and receiverId as query parameters and changes the status of all messages between them to "seen".
         [HttpGet("SeenMessages")]
         public IActionResult SeenMessages([FromQuery] int senderId, [FromQuery] int receiverId)
         {
@@ -984,6 +1038,43 @@ namespace NailsServer.Controllers
 
                 context.ChangeAllMessagesToSeen(senderId, receiverId);
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        //This method checks if a specific user is blocked.
+        //It takes userId as a query parameter and returns a boolean indicating whether the user is blocked or not.
+        [HttpGet("GetBlock")]
+        public IActionResult GetBlock([FromQuery] int userId)
+        {
+            try
+            {
+                //Check who is logged in
+                string? userEmail = HttpContext.Session.GetString("loggedInUser");
+                if (string.IsNullOrEmpty(userEmail))
+                {
+                    return Unauthorized("User is not logged in");
+                }
+                //Get the user from database
+                Models.User? theUser = context.GetUserById(userId);
+                //Read like of the user of the post
+                bool u;
+
+                //Check if the user is blocked or not
+                if (theUser.IsBlocked == true)
+                {
+                    u = true;
+                }
+                else
+                {
+                    u = false;
+                }
+
+                return Ok(u);
             }
             catch (Exception ex)
             {

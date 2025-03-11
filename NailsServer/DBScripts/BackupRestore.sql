@@ -15,7 +15,7 @@ Create Database NailsDB
 Go
 
 
-select * from Post
+select * from Users
 Update Post Set Pic='/postsImages/4.jpg' Where PostID=4
 
 Insert into Post (UserID, PostText,PostTime,Pic) VALUES ('3','OMG','2020-03-22 00:00:00','/postsImages/12.jpg')
