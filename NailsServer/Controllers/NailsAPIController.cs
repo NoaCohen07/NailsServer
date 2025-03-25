@@ -71,8 +71,8 @@ namespace NailsServer.Controllers
         }
 
 
-        // This method handles user registration by creating a new user in the database with the provided details.
-        // It assigns a default profile picture and returns the newly created user data.
+        //This method handles user registration by creating a new user in the database with the provided details.
+        //It assigns a default profile picture and returns the newly created user data.
         [HttpPost("register")]
         public IActionResult Register([FromBody] DTO.User userDto)
         {
