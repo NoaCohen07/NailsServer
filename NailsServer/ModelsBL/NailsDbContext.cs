@@ -35,7 +35,7 @@ public partial class NailsDbContext : DbContext
         User? u = GetUser(email);
         if (u != null) 
         {
-            return this.Posts.Where(p => p.UserId == u.UserId).OrderByDescending(p => p.PostTime).ToList();
+            return this.Posts.Where(p => p.UserId == u.UserId).Include(p=>p.Likes).OrderByDescending(p => p.PostTime).ToList();
         }
         else
         {
@@ -101,7 +101,7 @@ public partial class NailsDbContext : DbContext
 
     public List<Post> GetAllPosts()// reutrns a list with all of the posts that have been posted
     {
-        return this.Posts.ToList();
+        return this.Posts.Include(u=>u.Likes).ToList();
     }
 
     public List<string> GetAllEmails()//returns a list of emails of all of the users in the app

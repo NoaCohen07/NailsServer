@@ -23,10 +23,8 @@ namespace NailsServer.DTO
         
         public string FullPostImagePath { get; set; } = null!;
 
+        public int NumLikes { get; set; }
 
-        //public virtual Favorite? Favorite { get; set; }
-
-        //public virtual User? User { get; set; }
 
         public Post() { }
         public Post(Models.Post post)

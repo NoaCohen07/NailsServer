@@ -52,14 +52,8 @@ public partial class User
     [InverseProperty("Sender")]
     public virtual ICollection<ChatMessage> ChatMessageSenders { get; set; } = new List<ChatMessage>();
 
-    [InverseProperty("Post")]
-    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
     [InverseProperty("User")]
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
-
-    [InverseProperty("Post")]
-    public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
 
     [InverseProperty("User")]
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();

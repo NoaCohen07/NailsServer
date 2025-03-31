@@ -46,9 +46,9 @@ public partial class NailsDbContext : DbContext
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFAAB0AD8956");
+            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFAAC3869FDE");
 
-            entity.HasOne(d => d.Post).WithMany(p => p.Comments).HasConstraintName("FK__Comment__PostID__34C8D9D1");
+            entity.HasOne(d => d.Post).WithMany(p => p.Comments).HasConstraintName("FK__Comment__PostID__5FB337D6");
         });
 
         modelBuilder.Entity<Favorite>(entity =>
@@ -66,11 +66,11 @@ public partial class NailsDbContext : DbContext
 
         modelBuilder.Entity<Like>(entity =>
         {
-            entity.HasKey(e => new { e.PostId, e.UserId }).HasName("PK__Likes__7B6AECF233E259DB");
+            entity.HasKey(e => new { e.PostId, e.UserId }).HasName("PK__Likes__7B6AECF2C439D41D");
 
             entity.HasOne(d => d.Post).WithMany(p => p.Likes)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Likes__PostID__37A5467C");
+                .HasConstraintName("FK__Likes__PostID__628FA481");
         });
 
         modelBuilder.Entity<Post>(entity =>

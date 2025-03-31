@@ -19,5 +19,5 @@ public partial class Like
 
     [ForeignKey("PostId")]
     [InverseProperty("Likes")]
-    public virtual User Post { get; set; } = null!;
+    public virtual Post Post { get; set; } = null!;
 }
