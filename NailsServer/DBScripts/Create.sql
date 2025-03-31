@@ -64,7 +64,7 @@ Primary key (UserID, PostID)
 
 Create Table Comment
 (
-PostID int Foreign Key References Users(UserID),
+PostID int Foreign Key References Posts(PostID),
 CommentTime datetime NOT NULL,
 CommentText nvarchar(300),
 UserID int NOT NULL,
@@ -73,7 +73,7 @@ CommentID int Primary Key Identity(1,1) NOT NULL
 
 Create Table Likes
 (
-PostID int Foreign Key References Users(UserID),
+PostID int Foreign Key References Posts(PostID),
 UserID int,
 Primary Key (PostID, UserID)
 )
@@ -85,6 +85,7 @@ UserID int Foreign Key References Users(UserID),
 TreatmentText nvarchar(80) NOT NULL,
 Duration int NOT NULL,
 Price int NOT NULL
+
 )
 GO
 

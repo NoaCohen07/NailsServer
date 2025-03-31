@@ -82,7 +82,7 @@ namespace NailsServer.Controllers
 
                 //Create model user class
                 Models.User modelsUser = userDto.GetModel();
-                modelsUser.ProfilePic = "//profileImages/default.jpg";
+                modelsUser.ProfilePic = "/profileImages/default.jpg";
                 context.Users.Add(modelsUser);
                 context.SaveChanges();
 
@@ -481,7 +481,7 @@ namespace NailsServer.Controllers
 
                 //Comment was added!
               
-                return Ok();
+                return Ok(c);
             }
             catch (Exception ex)
             {
