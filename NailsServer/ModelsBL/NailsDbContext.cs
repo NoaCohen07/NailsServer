@@ -21,26 +21,33 @@ public partial class NailsDbContext : DbContext
 
     public Post? GetPost(int id)//returns post by post id
     {
-        return this.Posts.Where(p => p.PostId == id)
+        return this.Posts.Where(p => p.PostId == id).Include(u=>u.Users)
                             .FirstOrDefault();
     }
 
-    public Like? GetLike(int userId, int postId)// return like by the post id (which post) and user id (which user liked)
+    public bool GetLike(int userId, int postId)// return like by the post id (which post) and user id (which user liked)
     {
-        return this.Likes.Where(p => p.PostId == postId && p.UserId==userId)
-                            .FirstOrDefault();
+        User u= this.Posts.Where(p => p.PostId == postId).FirstOrDefault().Users.Where(u=>u.UserId==userId).FirstOrDefault();
+        if (u != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     public List<Post> GetPosts(string email)// returns all of the posts that the user posted and if user returns null will return empty list
     {
         User? u = GetUser(email);
-        if (u != null) 
+        if (u != null)
         {
-            return this.Posts.Where(p => p.UserId == u.UserId).Include(p=>p.Likes).OrderByDescending(p => p.PostTime).ToList();
+            return this.Posts.Where(p => p.UserId == u.UserId).Include(p => p.Users).OrderByDescending(p => p.PostTime).ToList();
         }
         else
         {
             return new List<Post>();
-        }                  
+        }
     }
     public List<Post> GetFavorites(string email)// returns all of the posts that the user favorite and if user returns null will return empty list
     {
@@ -57,9 +64,11 @@ public partial class NailsDbContext : DbContext
 
     }
 
-    public int GetNumLikes (int postId)//returns number of likes that a post has
+    public int GetNumLikes(int postId)//returns number of likes that a post has
     {
-        return this.Likes.Where(c => c.PostId == postId).Count();
+        Post p = this.Posts.Where(c => c.PostId == postId).Include(u => u.Users).FirstOrDefault(); ;
+        int num=p.Users.Count();
+        return num;
 
     }
     public bool GetFavorite(int userid, int postId)// returns the favorite post the a user favorite, if he hasn't favorite the post, fav will be null and return false
@@ -77,9 +86,8 @@ public partial class NailsDbContext : DbContext
     }
     public bool GetLiked(int userid, int postId)// returns the post the a user liked, if he hasn't liked the post, like will be null and return false
     {
-        Like? like = this.Likes.Where(p => p.PostId == postId && p.UserId == userid)
-                            .FirstOrDefault();
-        if (like == null)
+        User? user = this.Posts.Where(p => p.PostId == postId).FirstOrDefault().Users.Where(u=>u.UserId==userid).FirstOrDefault();
+        if (user == null)
         {
             return false;
         }
@@ -101,7 +109,7 @@ public partial class NailsDbContext : DbContext
 
     public List<Post> GetAllPosts()// reutrns a list with all of the posts that have been posted
     {
-        return this.Posts.Include(u=>u.Likes).ToList();
+        return this.Posts.Include(u => u.Users).ToList();
     }
 
     public List<string> GetAllEmails()//returns a list of emails of all of the users in the app

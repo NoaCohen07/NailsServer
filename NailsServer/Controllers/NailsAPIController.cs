@@ -336,11 +336,11 @@ namespace NailsServer.Controllers
                 List<Models.Post> list = context.GetPosts(email);
 
                 List<DTO.Post> posts = new List<DTO.Post>();
-                
-                foreach(Models.Post p in list)
+
+                foreach (Models.Post p in list)
                 {
                     DTO.Post post = new DTO.Post(p);
-                    
+
                     posts.Add(post);
                 }
 
@@ -613,7 +613,7 @@ namespace NailsServer.Controllers
 
                 List<DTO.Post> allPosts = new List<DTO.Post>();
 
-                //Convert each post model to a DTO and add to the list 
+                //Convert each post model to a DTO and add to the list
                 foreach (Models.Post p in list)
                 {
                     DTO.Post post = new DTO.Post(p);
@@ -729,7 +729,7 @@ namespace NailsServer.Controllers
         // This method allows a logged-in user to like a post.
         // It takes a Like DTO as input, converts it to a model, and saves it in the database.
         [HttpPost("Like")]
-        public IActionResult Like([FromBody] DTO.Like u)
+        public IActionResult Like([FromBody]int userId, [FromQuery]int postId)
         {
             try
             {
@@ -741,15 +741,12 @@ namespace NailsServer.Controllers
                 }
 
                 //Create model user class
-                //Models.User user = context.GetUser1(u.UserId);
-
-
-                Models.Like l = u.GetModel();
-                context.Likes.Add(l);
+                Models.User user = context.GetUserById(userId);
+                Models.Post p = context.GetPost(postId);
+                p.Users.Add(user);
+                context.Entry(p).State = EntityState.Modified;
                 context.SaveChanges();
-                //DTO.Like newFavorite = new DTO.Like(l);
-               
-
+                
                 //Task was updated!
                 return Ok();
             }
@@ -763,7 +760,7 @@ namespace NailsServer.Controllers
         //This method allows a logged-in user to remove a like from a post.
         //It takes a Like DTO as input, converts it to a model, and removes it from the database.
         [HttpPost("RemoveLike")]
-        public IActionResult RemoveLike([FromBody] DTO.Like u)
+        public IActionResult RemoveLike([FromBody] int userId, [FromQuery] int postId)
         {
             try
             {
@@ -776,12 +773,13 @@ namespace NailsServer.Controllers
 
                 //Create model user class
 
-                Models.Like l = u.GetModel();
-                context.Likes.Remove(l);
+                Models.User user = context.GetUserById(userId);
+                Models.Post p = context.GetPost(postId);
+                p.Users.Remove(user);
+                context.Entry(p).State = EntityState.Modified;
                 context.SaveChanges();
-               // DTO.Like newFavorite = new DTO.Like(l);
 
-                //Task was updated!
+                //Post was updated!
                 return Ok();
             }
             catch (Exception ex)

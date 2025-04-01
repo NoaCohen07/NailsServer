@@ -52,12 +52,19 @@ public partial class User
     [InverseProperty("Sender")]
     public virtual ICollection<ChatMessage> ChatMessageSenders { get; set; } = new List<ChatMessage>();
 
+    [InverseProperty("Post")]
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
     [InverseProperty("User")]
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 
     [InverseProperty("User")]
-    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+    public virtual ICollection<Post> PostsNavigation { get; set; } = new List<Post>();
 
     [InverseProperty("User")]
     public virtual ICollection<Treatment> Treatments { get; set; } = new List<Treatment>();
+
+    [ForeignKey("UserId")]
+    [InverseProperty("Users")]
+    public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 }

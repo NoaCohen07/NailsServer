@@ -74,7 +74,7 @@ CommentID int Primary Key Identity(1,1) NOT NULL
 Create Table Likes
 (
 PostID int Foreign Key References Post(PostID),
-UserID int,
+UserID int Foreign Key References Users(UserID),
 Primary Key (PostID, UserID)
 )
 
@@ -116,6 +116,8 @@ Insert into Treatments (UserID, TreatmentText, Price, Duration) Values ('1','gel
 Update Users Set Pic='/profileImages/3.jpg' Where UserId=3
 
 select * from Likes
+
+DRop table Likes
 
 
 --scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=NailsDB;User ID=NailsLogin;Password=12345;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context NailsDbContext -DataAnnotations –force

@@ -21,8 +21,6 @@ public partial class NailsDbContext : DbContext
 
     public virtual DbSet<Favorite> Favorites { get; set; }
 
-    public virtual DbSet<Like> Likes { get; set; }
-
     public virtual DbSet<Post> Posts { get; set; }
 
     public virtual DbSet<Treatment> Treatments { get; set; }
@@ -46,9 +44,9 @@ public partial class NailsDbContext : DbContext
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFAAC3869FDE");
+            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFAAB0AD8956");
 
-            entity.HasOne(d => d.Post).WithMany(p => p.Comments).HasConstraintName("FK__Comment__PostID__5FB337D6");
+            entity.HasOne(d => d.Post).WithMany(p => p.Comments).HasConstraintName("FK__Comment__PostID__34C8D9D1");
         });
 
         modelBuilder.Entity<Favorite>(entity =>
@@ -64,20 +62,30 @@ public partial class NailsDbContext : DbContext
                 .HasConstraintName("FK__Favorites__UserI__31EC6D26");
         });
 
-        modelBuilder.Entity<Like>(entity =>
-        {
-            entity.HasKey(e => new { e.PostId, e.UserId }).HasName("PK__Likes__7B6AECF2C439D41D");
-
-            entity.HasOne(d => d.Post).WithMany(p => p.Likes)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Likes__PostID__628FA481");
-        });
-
         modelBuilder.Entity<Post>(entity =>
         {
             entity.HasKey(e => e.PostId).HasName("PK__Post__AA126038D9022A8A");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Posts).HasConstraintName("FK__Post__UserID__2E1BDC42");
+            entity.HasOne(d => d.User).WithMany(p => p.PostsNavigation).HasConstraintName("FK__Post__UserID__2E1BDC42");
+
+            entity.HasMany(d => d.Users).WithMany(p => p.Posts)
+                .UsingEntity<Dictionary<string, object>>(
+                    "Like",
+                    r => r.HasOne<User>().WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__Likes__UserID__5EBF139D"),
+                    l => l.HasOne<Post>().WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__Likes__PostID__5DCAEF64"),
+                    j =>
+                    {
+                        j.HasKey("PostId", "UserId").HasName("PK__Likes__7B6AECF22C73733E");
+                        j.ToTable("Likes");
+                        j.IndexerProperty<int>("PostId").HasColumnName("PostID");
+                        j.IndexerProperty<int>("UserId").HasColumnName("UserID");
+                    });
         });
 
         modelBuilder.Entity<Treatment>(entity =>

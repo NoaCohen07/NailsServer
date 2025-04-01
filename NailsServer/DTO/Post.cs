@@ -34,6 +34,14 @@ namespace NailsServer.DTO
             this.PostText = post.PostText;
             this.Pic = post.Pic;
             this.PostId = post.PostId;
+            this.NumLikes = 0;
+            if (post.Users != null)
+            {
+                foreach (Models.User u in post.Users)
+                {
+                   NumLikes++;
+                }
+            }
         }
 
         public Models.Post GetModel()

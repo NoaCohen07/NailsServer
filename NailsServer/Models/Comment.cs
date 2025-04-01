@@ -27,5 +27,5 @@ public partial class Comment
 
     [ForeignKey("PostId")]
     [InverseProperty("Comments")]
-    public virtual Post? Post { get; set; }
+    public virtual User? Post { get; set; }
 }
