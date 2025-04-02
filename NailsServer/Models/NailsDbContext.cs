@@ -74,14 +74,14 @@ public partial class NailsDbContext : DbContext
                     r => r.HasOne<User>().WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Likes__UserID__5EBF139D"),
+                        .HasConstraintName("FK__Likes__UserID__5DCAEF64"),
                     l => l.HasOne<Post>().WithMany()
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Likes__PostID__5DCAEF64"),
+                        .HasConstraintName("FK__Likes__PostID__5CD6CB2B"),
                     j =>
                     {
-                        j.HasKey("PostId", "UserId").HasName("PK__Likes__7B6AECF22C73733E");
+                        j.HasKey("PostId", "UserId").HasName("PK__Likes__7B6AECF2AFB712B0");
                         j.ToTable("Likes");
                         j.IndexerProperty<int>("PostId").HasColumnName("PostID");
                         j.IndexerProperty<int>("UserId").HasColumnName("UserID");
