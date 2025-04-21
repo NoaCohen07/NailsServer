@@ -86,7 +86,8 @@ public partial class NailsDbContext : DbContext
     }
     public bool GetLiked(int userid, int postId)// returns the post the a user liked, if he hasn't liked the post, like will be null and return false
     {
-        User? user = this.Posts.Where(p => p.PostId == postId).FirstOrDefault().Users.Where(u=>u.UserId==userid).FirstOrDefault();
+        Post p = this.Posts.Where(p => p.PostId == postId).Include(u => u.Users).FirstOrDefault();
+        User? user = p.Users.Where(u=>u.UserId==userid).FirstOrDefault();
         if (user == null)
         {
             return false;
