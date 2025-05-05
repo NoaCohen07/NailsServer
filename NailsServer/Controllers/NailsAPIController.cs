@@ -1020,29 +1020,6 @@ namespace NailsServer.Controllers
 
         }
 
-        //This method marks all messages between a specific sender and receiver as "seen".
-        //It takes senderId and receiverId as query parameters and changes the status of all messages between them to "seen".
-        [HttpGet("SeenMessages")]
-        public IActionResult SeenMessages([FromQuery] int senderId, [FromQuery] int receiverId)
-        {
-            try
-            {
-                //Check if who is logged in
-                string? userEmail = HttpContext.Session.GetString("loggedInUser");
-                if (string.IsNullOrEmpty(userEmail))
-                {
-                    return Unauthorized("User is not logged in");
-                }
-
-                context.ChangeAllMessagesToSeen(senderId, receiverId);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-        }
 
         //This method checks if a specific user is blocked.
         //It takes userId as a query parameter and returns a boolean indicating whether the user is blocked or not.
