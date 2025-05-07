@@ -52,7 +52,7 @@ public partial class User
     [InverseProperty("Sender")]
     public virtual ICollection<ChatMessage> ChatMessageSenders { get; set; } = new List<ChatMessage>();
 
-    [InverseProperty("Post")]
+    [InverseProperty("User")]
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     [InverseProperty("User")]

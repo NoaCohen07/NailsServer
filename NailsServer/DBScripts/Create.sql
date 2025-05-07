@@ -67,7 +67,7 @@ Create Table Comment
 PostID int Foreign Key References Post(PostID),
 CommentTime datetime NOT NULL,
 CommentText nvarchar(300),
-UserID int NOT NULL,
+UserID int Foreign Key References Users(UserID) NOT NULL,
 CommentID int Primary Key Identity(1,1) NOT NULL
 )
 
@@ -103,7 +103,7 @@ Go
 
 Insert Into Users (FirstName,LastName,DateOfBirth,Email,PhoneNumber,UserAddress,Gender, Pass,IsManicurist,IsBlocked, IsManager, ProfilePic) VALUES ('ori','geva','13-mar-2007','geva.ori1@gmail.com','0504445751','Mazal Arieh Street, Hod Hasharon, Israel','F','N12345','1','0','1','/profileImages/default.jpg')
 
-Select * From Users
+Select * From ChatMessages
 Go
 
 Insert Into ChatMessages (SenderID ,ReceiverID ,MessageText ,MessageTime,Seen) Values ('1','2','hi','2018-03-22 00:00:00','0')
@@ -117,7 +117,7 @@ Update Users Set Pic='/profileImages/3.jpg' Where UserId=3
 
 select * from Likes
 
-DRop table Likes
+DRop table Comment
 
 
 --scaffold-DbContext "Server = (localdb)\MSSQLLocalDB;Initial Catalog=NailsDB;User ID=NailsLogin;Password=12345;" Microsoft.EntityFrameworkCore.SqlServer -OutPutDir Models -Context NailsDbContext -DataAnnotations –force

@@ -44,9 +44,13 @@ public partial class NailsDbContext : DbContext
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFAAB0AD8956");
+            entity.HasKey(e => e.CommentId).HasName("PK__Comment__C3B4DFAA60D039B8");
 
-            entity.HasOne(d => d.Post).WithMany(p => p.Comments).HasConstraintName("FK__Comment__PostID__34C8D9D1");
+            entity.HasOne(d => d.Post).WithMany(p => p.Comments).HasConstraintName("FK__Comment__PostID__71D1E811");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Comments)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Comment__UserID__72C60C4A");
         });
 
         modelBuilder.Entity<Favorite>(entity =>
