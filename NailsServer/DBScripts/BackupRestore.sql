@@ -26,3 +26,5 @@ RESTORE DATABASE NailsDB FROM DISK = 'C:\Users\User\Source\Repos\NailsServer\Nai
   MOVE 'NailsDB' TO 'C:\Users\User\NailsDB.mdf', --להחליף לנתיב שנמצא על המחשב שלך
   MOVE 'NailsDB_log' TO 'C:\Users\User\NailsDB_log.ldf';
 ALTER DATABASE NailsDB SET MULTI_USER;
+
+Select * from Post

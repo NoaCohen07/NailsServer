@@ -113,9 +113,9 @@ Insert into Post (UserID, PostText,PostTime,Pic) VALUES ('1','Love ','2018-03-22
 Insert into Comment (PostID, CommentTime, CommentText, UserID) Values ('1','2018-03-22 00:00:00','Noa is amazing','1')
 Insert into Treatments (UserID, TreatmentText, Price, Duration) Values ('1','gel', 120, 45)
 
-Update Users Set Pic='/profileImages/3.jpg' Where UserId=3
+Update Post Set Pic='/postsImages/14.jfif' Where PostID=14
 
-select * from Likes
+select * from Post
 
 DRop table Comment
 
