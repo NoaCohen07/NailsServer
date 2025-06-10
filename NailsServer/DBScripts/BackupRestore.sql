@@ -19,7 +19,7 @@ Go
 Use master
 Go
 
-
+Select * from Comment
 
 USE master;
 ALTER DATABASE NailsDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
