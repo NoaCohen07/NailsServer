@@ -20,6 +20,7 @@ Use master
 Go
 
 
+
 USE master;
 ALTER DATABASE NailsDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
 RESTORE DATABASE NailsDB FROM DISK = 'C:\Users\User\Source\Repos\NailsServer\NailsServer\DBScripts\backup.bak' WITH REPLACE,     --להחליף את זה לנתיב של קובץ הגיבוי

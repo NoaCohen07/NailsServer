@@ -115,7 +115,7 @@ Insert into Treatments (UserID, TreatmentText, Price, Duration) Values ('1','gel
 
 Update Post Set Pic='/postsImages/15.webp' Where PostID=15
 
-select * from Post
+select * from Comment
 
 DRop table Comment
 
