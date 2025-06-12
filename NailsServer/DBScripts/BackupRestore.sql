@@ -19,8 +19,7 @@ Go
 Use master
 Go
 
-Select * from Comment
-
+Select * from ChatMessages
 USE master;
 ALTER DATABASE NailsDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
 RESTORE DATABASE NailsDB FROM DISK = 'C:\Users\User\Source\Repos\NailsServer\NailsServer\DBScripts\backup.bak' WITH REPLACE,     --להחליף את זה לנתיב של קובץ הגיבוי

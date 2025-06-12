@@ -71,17 +71,17 @@ public partial class NailsDbContext : DbContext
         return num;
 
     }
-    public bool GetFavorite(int userid, int postId)// returns the favorite post the a user favorite, if he hasn't favorite the post, fav will be null and return false
+    public Favorite GetFavorite(int userid, int postId)// returns the favorite post the a user favorite, if he hasn't favorite the post, fav will be null and return false
     {
         Favorite? fav= this.Favorites.Where(p => p.PostId == postId && p.UserId == userid)
                             .FirstOrDefault();
         if (fav == null)
         {
-            return false;
+            return null;
         }
         else
         {
-            return true;
+            return fav;
         }
     }
     public bool GetLiked(int userid, int postId)// returns if a user liked, if he hasn't liked the post, return will be false otherwise true

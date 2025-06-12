@@ -859,9 +859,17 @@ namespace NailsServer.Controllers
                 }
 
                 //Read favorite of the user of the post
-                bool u = context.GetFavorite(userId, postId);
-                //DTO.User user = new DTO.User(u);
-                return Ok(u);
+                Models.Favorite fav = context.GetFavorite(userId, postId);
+                if (fav == null)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    DTO.Favorite f = new DTO.Favorite(fav);
+                    return Ok(f);
+                }
+                
             }
             catch (Exception ex)
             {
